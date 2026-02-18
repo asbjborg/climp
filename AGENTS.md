@@ -7,14 +7,14 @@ This is the short- and long-term memory file for AI agents working on this proje
 - Before implementation, update docs first to capture intent and planned work.
 - Primary flow is:
   1. Backlog idea in `docs/BACKLOG.md` (and `docs/backlog/*.md` when needed)
-  2. Move active item into `docs/WORK.md`
+  2. Move active item into `docs/WORK.md`; add a task that **links to the idea doc** (e.g. `backlog/idea_name.md`)
   3. Iterate implementation and documentation together:
      - add/adjust tasks in `docs/WORK.md`
      - implement or modify code
-     - record delivered changes under `Unreleased` in `CHANGELOG.md`
+     - record delivered changes under `Unreleased` in `CHANGELOG.md`, **including a link to the idea doc** (e.g. “Based on: …” per version or per feature)
      - repeat until no active tasks remain for the feature
-  4. Stamp a version and release once the feature loop is complete
-- Treat `WORK.md` as in-progress only (not queued/done buckets).
+  4. Stamp a version and release once the feature loop is complete; then **remove** the task from `WORK.md` (do not leave it struck—WORK is in-progress only, no history).
+- `WORK.md` is **only** in-progress: a todo list while an idea is active. Once something is done, in CHANGELOG, and released, remove it from WORK. No done/done buckets, no struck items.
 - Keep `BACKLOG.md` for queued ideas and `CHANGELOG.md` for done/released work.
 - Commit often with small, understandable changesets.
 - Reference commit IDs in docs/notes when it helps trace implementation decisions.

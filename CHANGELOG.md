@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+**Convention:** For each version or feature that came from a backlog idea, link to the idea doc (e.g. `docs/backlog/idea_name.md`) so we keep the tie from shipped work back to the design.
+
 ## [Unreleased]
 
 ### Added
@@ -19,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 ## [0.2.0] - 2026-02-18
+
+**Based on:** [spawn_behavior.md](docs/backlog/spawn_behavior.md)
 
 ### Added
 - First-join spawn-egg gifting flow for Climp, controlled by config.

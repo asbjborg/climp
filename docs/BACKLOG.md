@@ -43,7 +43,7 @@ A cane or stick item you carry (like a walking stick irl). Used to "send Climp o
 
 ---
 
-*Add more ideas below. Link from WORK.md when we pick one up.*
+*Add more ideas below. When we pick one up, add a task in [WORK.md](WORK.md) and link to this idea doc there—and keep that link when we record the work in [CHANGELOG.md](../CHANGELOG.md).*
 
 ---
 
