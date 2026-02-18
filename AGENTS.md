@@ -18,12 +18,21 @@ This is the short- and long-term memory file for AI agents working on this proje
 - Do not clear an idea from `WORK.md` after a partial implementation slice; instead update the active line to the next phase/scope.
 - Keep `BACKLOG.md` for queued ideas and `CHANGELOG.md` for done/released work.
 - Commit often with small, understandable changesets.
+- Commit cadence (high priority):
+  - commit after each meaningful code/doc change
+  - commit after each test-result-driven update (including WORK/CHANGELOG note updates)
+  - prefer many small commits over large mixed commits
+  - if uncertain, commit sooner rather than later
 - Reference commit IDs in docs/notes when it helps trace implementation decisions.
 - Release hygiene for `CHANGELOG.md`:
   - once a feature loop is verified/done, move its entries from `Unreleased` into the new version section immediately
   - reset `Unreleased` placeholders (`Added/Changed/Fixed`) after the cut
   - update compare links (`[Unreleased]` should point from latest version tag to `HEAD`)
   - prefer using `scripts/changelog_release.py` to cut versions consistently
+  - in `Unreleased`, prefer additive wording for in-progress work; avoid transitional phrasing like "now", "no longer", or "changed from X to Y" unless documenting a true revision to already-documented released behavior
+- Commit message style:
+  - transition phrasing is encouraged in commit messages (e.g. "now", "no longer", "switch to", "replace X with Y") because commits describe deltas between snapshots
+  - use commit messages to explain "what changed since the previous commit" and why
 
 ## Practical Benefit to Preserve
 
