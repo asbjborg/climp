@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Phase 2 command behavior: Climp slowly breaks the targeted log, then returns to the requesting player before completing the task.
 - Climp AI now prioritizes an active command target before normal follow behavior.
 - Explicit command task outcomes: successful tasks send completion lines, failed tasks send failure lines.
+- Task-specific failure variants: unreachable target and target-removed-before-arrival use distinct failure lines (commit: `9acc37a`).
 - Timeout and fallback handling to prevent Climp getting stuck in command-task states.
 - Fast unreachable-target detection for stalled pathing, so impossible command targets fail sooner.
 - Verified in-game: command rod on non-log blocks does nothing.

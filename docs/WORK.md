@@ -23,7 +23,7 @@
 - [ ] implement command task cooldown (short lockout after finish/fail to prevent spam)
 - [ ] test failure reason messaging variants. Results:
     - tbd
-- [ ] implement task-specific failure reason variants (unreachable vs target removed) for clearer feedback
+- [x] implement task-specific failure reason variants (unreachable vs target removed) for clearer feedback (commit: `9acc37a`)
 - [x] test faster failure behavior. Results:
     - unreachable target gives up in about 5 seconds and Climp recovers correctly
 - [x] make it fail faster when it can't reach the target instead of waiting for timeout (commit: `e03b247`)
