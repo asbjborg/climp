@@ -3,7 +3,8 @@ package com.asbjborg.climp.entity;
 import java.util.EnumSet;
 import javax.annotation.Nullable;
 
-import net.minecraft.network.chat.Component;
+import com.asbjborg.climp.speech.ClimpSpeechManager;
+
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
@@ -14,27 +15,12 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerPlayer;
 
 /**
  * Climp entity with MVP follow behavior.
  */
 public class ClimpEntity extends PathfinderMob {
-    private static final String[] IDLE_COMMENTS = new String[] {
-            "I am not lost. I am orbiting.",
-            "That rock looked valuable. Emotionally.",
-            "I could optimize this route, but then we would miss the ambiance.",
-            "I am moderately helpful. Structurally flexible."
-    };
-    private static final String[] HIT_COMMENTS = new String[] {
-            "Rude. I am decorative and emotionally available.",
-            "Ow. That was my best angle.",
-            "Violence noted. Friendship pending.",
-            "If this is a trust exercise, I am failing it."
-    };
-
-    private int commentCooldownTicks = 20 * 20;
-    private int hitCommentCooldownTicks = 0;
+    private final ClimpSpeechManager speechManager = new ClimpSpeechManager();
 
     protected ClimpEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
         super(entityType, level);
@@ -52,32 +38,7 @@ public class ClimpEntity extends PathfinderMob {
     @Override
     public void aiStep() {
         super.aiStep();
-        if (this.hitCommentCooldownTicks > 0) {
-            this.hitCommentCooldownTicks--;
-        }
-        this.tryIdleComment();
-    }
-
-    private void tryIdleComment() {
-        if (this.level().isClientSide || this.commentCooldownTicks-- > 0) {
-            return;
-        }
-
-        Player nearest = this.level().getNearestPlayer(this, 7.0D);
-        if (!(nearest instanceof ServerPlayer player) || nearest.isSpectator()) {
-            return;
-        }
-
-        // Keep lines rare and mostly when Climp is settled near the player.
-        boolean climpIsSettled = this.getNavigation().isDone() && this.distanceToSqr(nearest) < 25.0D;
-        if (!climpIsSettled || this.random.nextInt(16) != 0) {
-            this.commentCooldownTicks = 20 * 8;
-            return;
-        }
-
-        String line = IDLE_COMMENTS[this.random.nextInt(IDLE_COMMENTS.length)];
-        player.sendSystemMessage(Component.literal("Climp: " + line));
-        this.commentCooldownTicks = 20 * 35;
+        this.speechManager.tick(this);
     }
 
     @Override
@@ -89,18 +50,7 @@ public class ClimpEntity extends PathfinderMob {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean didHurt = super.hurt(source, amount);
-        if (!didHurt || this.level().isClientSide || this.hitCommentCooldownTicks > 0) {
-            return didHurt;
-        }
-
-        if (source.getEntity() instanceof ServerPlayer player) {
-            String line = HIT_COMMENTS[this.random.nextInt(HIT_COMMENTS.length)];
-            player.sendSystemMessage(Component.literal("Climp: " + line));
-            this.hitCommentCooldownTicks = 20 * 8;
-            // Delay idle chatter for a bit after a hit reaction.
-            this.commentCooldownTicks = Math.max(this.commentCooldownTicks, 20 * 10);
-        }
-
+        this.speechManager.onHit(this, source, didHurt);
         return didHurt;
     }
 
