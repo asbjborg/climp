@@ -15,6 +15,7 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import com.asbjborg.climp.event.ClimpCommandEvents;
 import com.asbjborg.climp.event.ClimpPlayerEvents;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
@@ -32,6 +33,7 @@ public class ClimpMod {
         modEventBus.addListener(this::registerEntityAttributes);
         modEventBus.addListener(this::addCreativeTabEntries);
         NeoForge.EVENT_BUS.addListener(ClimpPlayerEvents::onPlayerLoggedIn);
+        NeoForge.EVENT_BUS.addListener(ClimpCommandEvents::onRegisterCommands);
 
         // Register entity types.
         ClimpEntityTypes.ENTITY_TYPES.register(modEventBus);

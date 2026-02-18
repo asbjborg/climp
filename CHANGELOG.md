@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- *(nothing yet)*
+- Runtime command-rod tuning commands: `/climp config show` and `/climp config set ...` for scan limit, break limit, and scan debug toggle.
+- Operator-gated config editing in-game (permission level 2+) with immediate feedback on updated values.
 
 ### Changed
 - *(nothing yet)*
