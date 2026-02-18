@@ -40,6 +40,11 @@ Climp is designed to:
 
 Lines are intentionally rare to preserve their impact.
 
+## Docs
+- **[docs/BACKLOG.md](docs/BACKLOG.md)** — Backlog (idea dump).
+- **[docs/WORK.md](docs/WORK.md)** — Current focus and tasks (linked to backlog).
+- **[CHANGELOG.md](CHANGELOG.md)** — Release history (Keep a Changelog).
+
 ## Roadmap
 - Exploration awareness
 - Biome tracking
