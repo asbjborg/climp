@@ -45,6 +45,7 @@ public class ClimpEntity extends PathfinderMob {
     private int commandNoPathTicks;
     private int commandCooldownTicks;
     private boolean commandTaskSucceeded;
+    private boolean commandRecallRequested;
     private ClimpSpeechManager.TaskFailureReason commandTaskFailureReason = ClimpSpeechManager.TaskFailureReason.UNREACHABLE;
 
     protected ClimpEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
@@ -97,6 +98,7 @@ public class ClimpEntity extends PathfinderMob {
         this.setCommandTaskStage(CommandTaskStage.TO_TARGET);
         this.commandBreakTicksRemaining = 0;
         this.commandTaskSucceeded = false;
+        this.commandRecallRequested = false;
         this.commandTaskFailureReason = ClimpSpeechManager.TaskFailureReason.UNREACHABLE;
         this.speechManager.onTaskStart(this, requester);
         return true;
@@ -104,6 +106,22 @@ public class ClimpEntity extends PathfinderMob {
 
     public boolean hasCommandTask() {
         return this.commandTaskStage != CommandTaskStage.NONE;
+    }
+
+    public boolean requestImmediateRecall(ServerPlayer requester) {
+        if (this.level().isClientSide || this.commandTaskStage == CommandTaskStage.NONE) {
+            return false;
+        }
+
+        this.commandRequesterId = requester.getUUID();
+        this.commandRecallRequested = true;
+        this.commandTaskSucceeded = false;
+        this.commandTaskFailureReason = ClimpSpeechManager.TaskFailureReason.UNREACHABLE;
+        this.setCommandTaskStage(CommandTaskStage.RETURNING);
+        this.commandBreakTicksRemaining = 0;
+        this.clearBreakProgress();
+        this.getNavigation().stop();
+        return true;
     }
 
     public boolean canAcceptCommandTask() {
@@ -123,7 +141,7 @@ public class ClimpEntity extends PathfinderMob {
         this.clearBreakProgress();
 
         ServerPlayer requester = this.getCommandRequester();
-        if (requester != null && requester.level() == this.level()) {
+        if (!this.commandRecallRequested && requester != null && requester.level() == this.level()) {
             if (this.commandTaskSucceeded) {
                 this.speechManager.onTaskComplete(this, requester);
             } else {
@@ -137,6 +155,7 @@ public class ClimpEntity extends PathfinderMob {
         this.commandBreakTicksRemaining = 0;
         this.commandStageTicks = 0;
         this.commandTaskSucceeded = false;
+        this.commandRecallRequested = false;
         this.commandTaskFailureReason = ClimpSpeechManager.TaskFailureReason.UNREACHABLE;
         this.commandCooldownTicks = COMMAND_TASK_COOLDOWN_TICKS;
         this.getNavigation().stop();
