@@ -6,8 +6,26 @@
 
 ## Active Work - [command_rod.md](backlog/command_rod.md)
 
-- [ ] test faster failure behavior. Results:
+- [ ] test emergency recall behavior (idle, moving, breaking, returning). Results:
     - tbd
+- [ ] implement shift-rightclick emergency recall: abort active task immediately, return to player, and unload any carried drops
+- [ ] test carry return behavior. Results:
+    - tbd
+- [ ] implement log-carry return behavior: collect drops from commanded break and deliver to player on return (do not leave drops at stump)
+- [ ] test tree-cluster scan safety cap behavior. Results:
+    - tbd
+- [ ] test weird/corner-connected logs selection behavior. Results:
+    - tbd
+- [ ] replace arbitrary vertical reach assumptions with tree-cluster selection rules
+- [ ] implement tree-cluster targeting from a clicked log: scan connected logs with safety cap, then select a ground-nearest anchor log as first target
+- [ ] test command task cooldown behavior. Results:
+    - tbd
+- [ ] implement command task cooldown (short lockout after finish/fail to prevent spam)
+- [ ] test failure reason messaging variants. Results:
+    - tbd
+- [ ] implement task-specific failure reason variants (unreachable vs target removed) for clearer feedback
+- [x] test faster failure behavior. Results:
+    - unreachable target gives up in about 5 seconds and Climp recovers correctly
 - [x] make it fail faster when it can't reach the target instead of waiting for timeout (commit: `e03b247`)
 - [x] test better reach and timeout behavior. results:
     - climp can now reach to 4 blocks above and below where he stands

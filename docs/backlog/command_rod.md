@@ -3,7 +3,23 @@
 ## Implementation Status
 
 - Phase 1 complete (`fb599b8`): command rod item, log targeting, nearest-Climp assignment, start/completion lines.
-- Next (phase 2): slow single-log breaking on arrival, then return behavior.
+- Phase 2 complete (`e03b247`): slow log breaking, return behavior, explicit fail outcomes, and recovery from unreachable targets.
+- Next (phase 3): tree-cluster aware targeting from clicked log (connected-log scan + safety cap + ground-nearest anchor selection).
+
+---
+
+## Phase 3 Direction (Tree-Cluster Targeting)
+
+Intent:
+- Click any log in a tree, then resolve a smarter target from that tree instead of relying on arbitrary vertical assumptions.
+
+Planned rules:
+- Scan connected logs starting from clicked log (including corner/diagonal neighbors) with a strict max-node safety cap.
+- Select a ground-nearest anchor log from the discovered cluster as the first actionable target.
+- If scan exceeds safety cap, fail gracefully with a clear message and do not lock Climp.
+- Keep command-task state recoverable at all times (no stuck "busy" state).
+- Commanded log drops are carried back and delivered near the player instead of being left at the break position.
+- Shift-rightclick with command rod acts as emergency recall: abort current task immediately, return to player, unload carried items.
 
 ---
 
@@ -43,7 +59,7 @@ Initial implementation should be minimal:
 No:
 - Multi-block harvesting.
 - Automation loops.
-- Inventory management.
+- Full inventory management/sorting systems.
 - Redstone integration.
 
 ---
