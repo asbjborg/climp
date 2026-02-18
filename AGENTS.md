@@ -22,8 +22,10 @@ This is the short- and long-term memory file for AI agents working on this proje
     - keep test outcomes directly under the related checklist item using `Results:` bullets
     - mark completed steps with `[x]`, keep pending steps as `[ ]`
     - do not use separate "backlog tasks" sections inside `WORK.md`
-    - ordering rule: reverse chronological by insertion (new tasks are added at index 0 / top)
-    - do not reorder or move existing tasks when updating notes/results; update them in place
+    - default ordering: add new pending tasks at the top of the pending (`[ ]`) block
+    - exception: if a test result directly creates a follow-up fix task, place that new task immediately above the test/result item that produced it
+    - future ideas should go to `BACKLOG.md`, not `WORK.md`
+    - do not reorder or move existing tasks unless applying the direct-follow-up exception above
     - for implementation-driven items, place the validation/check item immediately above the implementation item (bottom-up execution when reading)
 - Keep `BACKLOG.md` for queued ideas and `CHANGELOG.md` for done/released work.
 - Commit often with small, understandable changesets.

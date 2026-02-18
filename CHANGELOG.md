@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Timeout and fallback handling to prevent Climp getting stuck in command-task states.
 - Fast unreachable-target detection for stalled pathing, so impossible command targets fail sooner.
 - Short command-task cooldown after task resolution to reduce command spam.
+- Contextual command rejection messages that distinguish busy, cooldown, and no-Climp-in-range cases.
 - Verified in-game: command rod on non-log blocks does nothing.
 - Verified in-game: command rod on logs assigns nearest available Climp; Climp sends start + completion lines.
 - Verified in-game: when no Climp is available, player receives an explicit unavailable message.
