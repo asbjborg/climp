@@ -25,10 +25,14 @@ public final class ClimpSpeechLibrary {
                     "Objective achieved. You are welcome.",
                     "Task complete. I await further questionable directives.",
                     "Objective concluded. Dignity mostly intact."),
-            ClimpSpeechType.TASK_FAILED, List.of(
-                    "Task update: that did not go according to my narrative.",
-                    "Objective unresolved. External circumstances blamed.",
-                    "I regret to report a professional non-success."));
+            ClimpSpeechType.TASK_FAILED_UNREACHABLE, List.of(
+                    "Pathing update: objective unreachable from my current dramatic position.",
+                    "I could not reach that target. Gravity and geometry have spoken.",
+                    "Objective unresolved. Access constraints exceeded."),
+            ClimpSpeechType.TASK_FAILED_TARGET_REMOVED, List.of(
+                    "Task canceled. The target no longer exists.",
+                    "Update: someone removed the objective before I arrived.",
+                    "Objective vanished mid-operation. Suspicious."));
 
     private ClimpSpeechLibrary() {
     }

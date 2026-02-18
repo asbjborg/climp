@@ -11,6 +11,11 @@ import net.minecraft.world.entity.player.Player;
  * Handles Climp speech gating (rarity + cooldowns) and delivery.
  */
 public final class ClimpSpeechManager {
+    public enum TaskFailureReason {
+        UNREACHABLE,
+        TARGET_REMOVED
+    }
+
     private int idleCooldownTicks = 20 * 20;
     private int hitCooldownTicks = 0;
 
@@ -51,11 +56,15 @@ public final class ClimpSpeechManager {
         idleCooldownTicks = Math.max(idleCooldownTicks, 20 * 10);
     }
 
-    public void onTaskFailed(ClimpEntity climp, ServerPlayer player) {
+    public void onTaskFailed(ClimpEntity climp, ServerPlayer player, TaskFailureReason failureReason) {
         if (climp.level().isClientSide) {
             return;
         }
-        send(player, ClimpSpeechLibrary.randomLine(ClimpSpeechType.TASK_FAILED, climp.getRandom()));
+        ClimpSpeechType failureType = switch (failureReason) {
+            case TARGET_REMOVED -> ClimpSpeechType.TASK_FAILED_TARGET_REMOVED;
+            case UNREACHABLE -> ClimpSpeechType.TASK_FAILED_UNREACHABLE;
+        };
+        send(player, ClimpSpeechLibrary.randomLine(failureType, climp.getRandom()));
         idleCooldownTicks = Math.max(idleCooldownTicks, 20 * 10);
     }
 

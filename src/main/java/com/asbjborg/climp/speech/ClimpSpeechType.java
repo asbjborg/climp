@@ -5,5 +5,6 @@ public enum ClimpSpeechType {
     HIT,
     TASK_START,
     TASK_COMPLETE,
-    TASK_FAILED
+    TASK_FAILED_UNREACHABLE,
+    TASK_FAILED_TARGET_REMOVED
 }
