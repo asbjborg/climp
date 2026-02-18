@@ -27,6 +27,7 @@ This is the short- and long-term memory file for AI agents working on this proje
     - reset `Unreleased` placeholders (`Added/Changed/Fixed`) after the cut
     - update compare links (`[Unreleased]` should point from latest version tag to `HEAD`)
     - prefer using `scripts/changelog_release.py` to cut versions consistently
+    - prefer single-commit release cuts: stage shipped code/docs changes together with the changelog version stamp so `git blame` on `CHANGELOG.md` maps directly to shipped files
     - for active issue-driven work, append the GitHub issue reference (e.g. `(#9)`) in each relevant `Unreleased` bullet
     - in `Unreleased`, prefer additive wording for in-progress work; avoid transitional phrasing like "now", "no longer", or "changed from X to Y" unless documenting a true revision to already-documented released behavior
 - Commit message style:
