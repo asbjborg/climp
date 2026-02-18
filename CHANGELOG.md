@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Operator-gated config editing in-game (permission level 2+) with immediate feedback on updated values. (#9)
 - Runtime command-edited tree config now persists per world using `SavedData` and survives restarts. (#10)
 - Persisted runtime tree config is automatically reapplied on server startup to keep effective values in sync. (#10)
+- Commanded-break drop carry flow: Climp captures log drops from command tasks, carries them during return, and unloads near the requester. (#3)
+- Floating-tree scan starts now inherit initial reach from anchor distance so Climp can begin chomping when the lowest scanned log is above base reach. (#3)
 
 ### Changed
 - *(nothing yet)*

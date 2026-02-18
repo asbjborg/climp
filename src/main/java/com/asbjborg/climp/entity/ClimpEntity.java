@@ -3,7 +3,9 @@ package com.asbjborg.climp.entity;
 import java.util.EnumSet;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
@@ -13,8 +15,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.Containers;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -22,6 +26,8 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.level.Level;
 
 /**
@@ -41,6 +47,7 @@ public class ClimpEntity extends PathfinderMob {
     @Nullable
     private BlockPos commandTargetPos;
     private final Deque<BlockPos> commandQueuedTargets = new ArrayDeque<>();
+    private final Deque<ItemStack> commandCarriedDrops = new ArrayDeque<>();
     @Nullable
     private UUID commandRequesterId;
     private CommandTaskStage commandTaskStage = CommandTaskStage.NONE;
@@ -52,6 +59,7 @@ public class ClimpEntity extends PathfinderMob {
     private boolean commandRecallRequested;
     private boolean commandScanChompMode;
     private int commandClusterAnchorY;
+    private double commandScanInitialReachBonusBlocks;
     private ClimpSpeechManager.TaskFailureReason commandTaskFailureReason = ClimpSpeechManager.TaskFailureReason.UNREACHABLE;
 
     protected ClimpEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
@@ -110,12 +118,18 @@ public class ClimpEntity extends PathfinderMob {
 
         this.commandTargetPos = targetPos.immutable();
         this.commandQueuedTargets.clear();
+        this.commandCarriedDrops.clear();
         for (int i = 1; i < targetPositions.size(); i++) {
             this.commandQueuedTargets.addLast(targetPositions.get(i).immutable());
         }
         this.commandRequesterId = requester.getUUID();
         this.commandScanChompMode = targetPositions.size() > 1;
         this.commandClusterAnchorY = targetPos.getY();
+        this.commandScanInitialReachBonusBlocks = 0.0D;
+        if (this.commandScanChompMode && targetPos.getY() > this.blockPosition().getY()) {
+            double anchorDistanceBlocks = Math.sqrt(this.distanceToSqr(targetPos.getCenter()));
+            this.commandScanInitialReachBonusBlocks = Math.max(0.0D, anchorDistanceBlocks - COMMAND_TASK_REACH_BLOCKS);
+        }
         this.setCommandTaskStage(CommandTaskStage.TO_TARGET);
         this.commandBreakTicksRemaining = 0;
         this.commandTaskSucceeded = false;
@@ -143,6 +157,7 @@ public class ClimpEntity extends PathfinderMob {
         this.commandQueuedTargets.clear();
         this.commandScanChompMode = false;
         this.commandClusterAnchorY = 0;
+        this.commandScanInitialReachBonusBlocks = 0.0D;
         this.clearBreakProgress();
         this.getNavigation().stop();
         return true;
@@ -172,6 +187,7 @@ public class ClimpEntity extends PathfinderMob {
                 this.speechManager.onTaskFailed(this, requester, this.commandTaskFailureReason);
             }
         }
+        this.unloadCarriedDrops(requester);
 
         this.commandTargetPos = null;
         this.commandQueuedTargets.clear();
@@ -183,9 +199,32 @@ public class ClimpEntity extends PathfinderMob {
         this.commandRecallRequested = false;
         this.commandScanChompMode = false;
         this.commandClusterAnchorY = 0;
+        this.commandScanInitialReachBonusBlocks = 0.0D;
         this.commandTaskFailureReason = ClimpSpeechManager.TaskFailureReason.UNREACHABLE;
         this.commandCooldownTicks = COMMAND_TASK_COOLDOWN_TICKS;
         this.getNavigation().stop();
+    }
+
+    private void unloadCarriedDrops(@Nullable ServerPlayer requester) {
+        if (this.commandCarriedDrops.isEmpty()) {
+            return;
+        }
+
+        double dropX = this.getX();
+        double dropY = this.getY() + 0.2D;
+        double dropZ = this.getZ();
+        if (requester != null && requester.level() == this.level() && requester.isAlive()) {
+            dropX = requester.getX();
+            dropY = requester.getY() + 0.2D;
+            dropZ = requester.getZ();
+        }
+
+        while (!this.commandCarriedDrops.isEmpty()) {
+            ItemStack carriedStack = this.commandCarriedDrops.removeFirst();
+            if (!carriedStack.isEmpty()) {
+                Containers.dropItemStack(this.level(), dropX, dropY, dropZ, carriedStack);
+            }
+        }
     }
 
     private boolean isTargetLog() {
@@ -222,6 +261,28 @@ public class ClimpEntity extends PathfinderMob {
         return false;
     }
 
+    private void captureTargetDropsAndBreak(ServerLevel serverLevel, BlockPos target) {
+        AABB captureBox = new AABB(target).inflate(1.25D);
+        Set<UUID> preExistingItemEntityIds = new HashSet<>();
+        for (ItemEntity existingItem : serverLevel.getEntitiesOfClass(ItemEntity.class, captureBox, ItemEntity::isAlive)) {
+            preExistingItemEntityIds.add(existingItem.getUUID());
+        }
+
+        serverLevel.destroyBlock(target, true, this);
+
+        for (ItemEntity droppedItem : serverLevel.getEntitiesOfClass(ItemEntity.class, captureBox, ItemEntity::isAlive)) {
+            if (preExistingItemEntityIds.contains(droppedItem.getUUID())) {
+                continue;
+            }
+
+            ItemStack stack = droppedItem.getItem().copy();
+            if (!stack.isEmpty()) {
+                this.commandCarriedDrops.addLast(stack);
+            }
+            droppedItem.discard();
+        }
+    }
+
     private double getEffectiveTaskReachSqr(BlockPos target) {
         return this.getScaledReachSqr(COMMAND_TASK_REACH_BLOCKS, target);
     }
@@ -236,7 +297,7 @@ public class ClimpEntity extends PathfinderMob {
         }
 
         int extraReachByHeight = Math.max(0, target.getY() - this.commandClusterAnchorY);
-        double scaledReachBlocks = baseReachBlocks + extraReachByHeight;
+        double scaledReachBlocks = baseReachBlocks + this.commandScanInitialReachBonusBlocks + extraReachByHeight;
         return scaledReachBlocks * scaledReachBlocks;
     }
 
@@ -378,7 +439,7 @@ public class ClimpEntity extends PathfinderMob {
             this.climp.commandBreakTicksRemaining--;
             if (this.climp.commandBreakTicksRemaining <= 0) {
                 if (this.climp.level() instanceof ServerLevel serverLevel && this.climp.isTargetLog()) {
-                    serverLevel.destroyBlock(target, true, this.climp);
+                    this.climp.captureTargetDropsAndBreak(serverLevel, target);
                 }
                 if (!this.climp.advanceToNextQueuedTarget()) {
                     this.climp.markReturningToRequester(true, ClimpSpeechManager.TaskFailureReason.UNREACHABLE);

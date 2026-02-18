@@ -8,6 +8,7 @@
 - Phase 3b complete: whole-tree chomp — after breaking the anchor log, continue with remaining logs in the cluster (e.g. ascending Y) until cluster is cleared or cap reached (~100 logs per command).
 - Phase 4 complete: in-game runtime config commands for command-rod tuning (`/climp config ...`) without relog.
 - Phase 4b complete: command-edited runtime tree config persists per world and reapplies on server start.
+- Next (phase 5): capture commanded break drops, carry them with Climp during return, and unload near the requester.
 
 ---
 
@@ -21,6 +22,7 @@ Planned rules:
 - Select a ground-nearest anchor log from the discovered cluster as the first actionable target.
 - Phase 3b: After each log is broken, assign the next log in the cluster (e.g. lowest remaining) until the tree is cleared or break cap (configurable; default 100) is reached.
 - Phase 3b reach scaling: in scan-chomp mode, effective task reach grows by +1 block per +1 Y above the anchor log to reduce lingering unreachable crowns.
+- Floating-tree start handling: in scan-chomp mode, the anchor distance establishes initial reach baseline so chomping can start even when the anchor is above normal base reach.
 - Optional debug mode prints scanned/queued log counts for tuning tree limits.
 - If scan exceeds safety cap, fail gracefully with a clear message and do not lock Climp.
 - Keep command-task state recoverable at all times (no stuck "busy" state).
