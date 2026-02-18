@@ -18,6 +18,11 @@ This is the short- and long-term memory file for AI agents working on this proje
 - Keep `BACKLOG.md` for queued ideas and `CHANGELOG.md` for done/released work.
 - Commit often with small, understandable changesets.
 - Reference commit IDs in docs/notes when it helps trace implementation decisions.
+- Release hygiene for `CHANGELOG.md`:
+  - once a feature loop is verified/done, move its entries from `Unreleased` into the new version section immediately
+  - reset `Unreleased` placeholders (`Added/Changed/Fixed`) after the cut
+  - update compare links (`[Unreleased]` should point from latest version tag to `HEAD`)
+  - prefer using `scripts/changelog_release.py` to cut versions consistently
 
 ## Practical Benefit to Preserve
 
