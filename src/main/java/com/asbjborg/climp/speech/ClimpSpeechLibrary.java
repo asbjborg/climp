@@ -16,7 +16,15 @@ public final class ClimpSpeechLibrary {
                     "Rude. I am decorative and emotionally available.",
                     "Ow. That was my best angle.",
                     "Violence noted. Friendship pending.",
-                    "If this is a trust exercise, I am failing it."));
+                    "If this is a trust exercise, I am failing it."),
+            ClimpSpeechType.TASK_START, List.of(
+                    "Manual labor detected. Delegation accepted.",
+                    "Task acknowledged. Commencing dramatic approach.",
+                    "I shall handle this with professional ambiguity."),
+            ClimpSpeechType.TASK_COMPLETE, List.of(
+                    "Objective achieved. You are welcome.",
+                    "Task complete. I await further questionable directives.",
+                    "Objective concluded. Dignity mostly intact."));
 
     private ClimpSpeechLibrary() {
     }

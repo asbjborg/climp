@@ -1,11 +1,10 @@
 {
   "item.climp.climp_spawn_egg": "Climp Spawn Egg",
+  "item.climp.command_rod": "Command Rod",
 
   "climp.configuration.title": "Climp Configs",
   "climp.configuration.section.climp.common.toml": "Climp Configs",
   "climp.configuration.section.climp.common.toml.title": "Climp Configs",
-  "climp.configuration.items": "Item List",
-  "climp.configuration.logDirtBlock": "Log Dirt Block",
-  "climp.configuration.magicNumberIntroduction": "Magic Number Text",
-  "climp.configuration.magicNumber": "Magic Number"
+  "climp.configuration.giveSpawnEggOnFirstJoin": "Give Spawn Egg On First Join",
+  "climp.configuration.preferredHotbarSlot": "Preferred Hotbar Slot"
 }

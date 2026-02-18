@@ -19,6 +19,10 @@ public final class ClimpItems {
                     0x5F6772,
                     new Item.Properties()));
 
+    public static final DeferredItem<Item> COMMAND_ROD = ITEMS.register(
+            "command_rod",
+            () -> new CommandRodItem(new Item.Properties()));
+
     private ClimpItems() {
     }
 }

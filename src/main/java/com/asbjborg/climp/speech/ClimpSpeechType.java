@@ -2,5 +2,7 @@ package com.asbjborg.climp.speech;
 
 public enum ClimpSpeechType {
     IDLE,
-    HIT
+    HIT,
+    TASK_START,
+    TASK_COMPLETE
 }

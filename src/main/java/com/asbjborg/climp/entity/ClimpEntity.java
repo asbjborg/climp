@@ -1,10 +1,13 @@
 package com.asbjborg.climp.entity;
 
 import java.util.EnumSet;
+import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.asbjborg.climp.speech.ClimpSpeechManager;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
@@ -20,7 +23,14 @@ import net.minecraft.world.level.Level;
  * Climp entity with MVP follow behavior.
  */
 public class ClimpEntity extends PathfinderMob {
+    private static final double COMMAND_TASK_RANGE_SQR = 16.0D * 16.0D;
+    private static final double COMMAND_TASK_REACH_SQR = 2.5D * 2.5D;
+
     private final ClimpSpeechManager speechManager = new ClimpSpeechManager();
+    @Nullable
+    private BlockPos commandTargetPos;
+    @Nullable
+    private UUID commandRequesterId;
 
     protected ClimpEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
         super(entityType, level);
@@ -29,10 +39,11 @@ public class ClimpEntity extends PathfinderMob {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new FollowNearestPlayerGoal(this, 1.12D, 3.0F, 28.0F));
-        this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 0.9D));
-        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(1, new CommandTargetGoal(this, 1.18D));
+        this.goalSelector.addGoal(2, new FollowNearestPlayerGoal(this, 1.12D, 3.0F, 28.0F));
+        this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.9D));
+        this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
     }
 
     @Override
@@ -52,6 +63,81 @@ public class ClimpEntity extends PathfinderMob {
         boolean didHurt = super.hurt(source, amount);
         this.speechManager.onHit(this, source, didHurt);
         return didHurt;
+    }
+
+    public boolean assignLogTask(ServerPlayer requester, BlockPos targetPos) {
+        if (this.level().isClientSide || this.commandTargetPos != null) {
+            return false;
+        }
+
+        if (this.distanceToSqr(targetPos.getCenter()) > COMMAND_TASK_RANGE_SQR) {
+            return false;
+        }
+
+        this.commandTargetPos = targetPos.immutable();
+        this.commandRequesterId = requester.getUUID();
+        this.speechManager.onTaskStart(this, requester);
+        return true;
+    }
+
+    public boolean hasCommandTask() {
+        return this.commandTargetPos != null;
+    }
+
+    @Nullable
+    private BlockPos getCommandTargetPos() {
+        return this.commandTargetPos;
+    }
+
+    private void completeCommandTask() {
+        ServerPlayer requester = this.commandRequesterId == null ? null : this.level().getServer().getPlayerList().getPlayer(this.commandRequesterId);
+        if (requester != null && requester.level() == this.level()) {
+            this.speechManager.onTaskComplete(this, requester);
+        }
+
+        this.commandTargetPos = null;
+        this.commandRequesterId = null;
+        this.getNavigation().stop();
+    }
+
+    private static final class CommandTargetGoal extends Goal {
+        private final ClimpEntity climp;
+        private final double speedModifier;
+        private int recalcPathTicks;
+
+        private CommandTargetGoal(ClimpEntity climp, double speedModifier) {
+            this.climp = climp;
+            this.speedModifier = speedModifier;
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+        }
+
+        @Override
+        public boolean canUse() {
+            return this.climp.getCommandTargetPos() != null;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.climp.getCommandTargetPos() != null;
+        }
+
+        @Override
+        public void tick() {
+            BlockPos target = this.climp.getCommandTargetPos();
+            if (target == null) {
+                return;
+            }
+
+            this.climp.getLookControl().setLookAt(target.getX() + 0.5D, target.getY() + 0.5D, target.getZ() + 0.5D);
+            if (--this.recalcPathTicks <= 0) {
+                this.recalcPathTicks = this.adjustedTickDelay(10);
+                this.climp.getNavigation().moveTo(target.getX() + 0.5D, target.getY(), target.getZ() + 0.5D, this.speedModifier);
+            }
+
+            if (this.climp.distanceToSqr(target.getCenter()) <= COMMAND_TASK_REACH_SQR) {
+                this.climp.completeCommandTask();
+            }
+        }
     }
 
     private static final class FollowNearestPlayerGoal extends Goal {

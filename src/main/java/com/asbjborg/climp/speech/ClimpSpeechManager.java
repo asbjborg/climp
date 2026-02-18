@@ -34,6 +34,23 @@ public final class ClimpSpeechManager {
         }
     }
 
+    public void onTaskStart(ClimpEntity climp, ServerPlayer player) {
+        if (climp.level().isClientSide) {
+            return;
+        }
+        send(player, ClimpSpeechLibrary.randomLine(ClimpSpeechType.TASK_START, climp.getRandom()));
+        // Pause idle chatter briefly so command speech is not immediately followed by idle text.
+        idleCooldownTicks = Math.max(idleCooldownTicks, 20 * 8);
+    }
+
+    public void onTaskComplete(ClimpEntity climp, ServerPlayer player) {
+        if (climp.level().isClientSide) {
+            return;
+        }
+        send(player, ClimpSpeechLibrary.randomLine(ClimpSpeechType.TASK_COMPLETE, climp.getRandom()));
+        idleCooldownTicks = Math.max(idleCooldownTicks, 20 * 10);
+    }
+
     private void tryIdleSpeech(ClimpEntity climp) {
         if (climp.level().isClientSide || idleCooldownTicks-- > 0) {
             return;
