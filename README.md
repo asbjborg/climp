@@ -42,7 +42,7 @@ Lines are intentionally rare to preserve their impact.
 
 ## Docs
 - **[docs/BACKLOG.md](docs/BACKLOG.md)** — Backlog (idea dump).
-- **[docs/WORK.md](docs/WORK.md)** — Current focus and tasks (linked to backlog).
+- **[Issues](https://github.com/asbjborg/climp/issues)** — Active tasks and testing queue.
 - **[CHANGELOG.md](CHANGELOG.md)** — Release history (Keep a Changelog).
 
 ## Roadmap

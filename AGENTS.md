@@ -7,26 +7,14 @@ This is the short- and long-term memory file for AI agents working on this proje
 - Before implementation, update docs first to capture intent and planned work.
 - Primary flow is:
   1. Backlog idea in `docs/BACKLOG.md` (and `docs/backlog/*.md` when needed)
-  2. Move active item into `docs/WORK.md`; add a task that **links to the idea doc** (e.g. `backlog/idea_name.md`)
+  2. Create/update GitHub issue(s) for active work; each issue should include a link to the relevant backlog doc
   3. Iterate implementation and documentation together:
-     - add/adjust tasks in `docs/WORK.md`
+     - track status/progress in the GitHub issue(s)
      - implement or modify code
      - record delivered changes under `Unreleased` in `CHANGELOG.md`, **including a link to the idea doc** (e.g. “Based on: …” per version or per feature)
      - repeat until the **idea** (not just a sub-step) is complete
-  4. Stamp a version and release once the full idea loop is complete; then **remove** the task from `WORK.md` (do not leave it struck—WORK is in-progress only, no history).
-- `WORK.md` is **only** in-progress: a todo list while an idea is active. Multi-step ideas stay in WORK across phases until fully released.
-- Do not clear an idea from `WORK.md` after a partial implementation slice; instead update the active line to the next phase/scope.
-- `WORK.md` format preference:
-    - use a single active header in the form: `## Active Work - [idea_doc.md](backlog/idea_doc.md)`
-    - track work as an interleaved checklist of implementation tasks and test tasks
-    - keep test outcomes directly under the related checklist item using `Results:` bullets
-    - mark completed steps with `[x]`, keep pending steps as `[ ]`
-    - do not use separate "backlog tasks" sections inside `WORK.md`
-    - default ordering: add new pending tasks at the top of the pending (`[ ]`) block
-    - exception: if a test result directly creates a follow-up fix task, place that new task immediately above the test/result item that produced it
-    - future ideas should go to `BACKLOG.md`, not `WORK.md`
-    - do not reorder or move existing tasks unless applying the direct-follow-up exception above
-    - for implementation-driven items, place the validation/check item immediately above the implementation item (bottom-up execution when reading)
+  4. Stamp a version and release once the full idea loop is complete; then close related GitHub issue(s).
+- Active task queue lives in GitHub issues: https://github.com/asbjborg/climp/issues
 - Keep `BACKLOG.md` for queued ideas and `CHANGELOG.md` for done/released work.
 - Commit often with small, understandable changesets.
 - Commit cadence (high priority):

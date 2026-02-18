@@ -1,6 +1,6 @@
 # Backlog
 
-High-level idea index. Keep each entry short here; detailed thinking lives in dedicated docs under `docs/backlog/`. When something becomes a real task, we track it in [WORK.md](WORK.md).
+High-level idea index. Keep each entry short here; detailed thinking lives in dedicated docs under `docs/backlog/`. When something becomes active work, we track it in GitHub Issues.
 
 ---
 
@@ -29,7 +29,7 @@ See: [command_rod.md](backlog/command_rod.md)
 
 The backlog remains lightweight and scannable.
 Deep thinking lives in dedicated files.
-WORK.md tracks active implementation.
+GitHub Issues track active implementation.
 
 ---
 
@@ -43,7 +43,7 @@ A cane or stick item you carry (like a walking stick irl). Used to "send Climp o
 
 ---
 
-*Add more ideas below. When we pick one up, add a task in [WORK.md](WORK.md) and link to this idea doc there—and keep that link when we record the work in [CHANGELOG.md](../CHANGELOG.md).*
+*Add more ideas below. When we pick one up, create/update a GitHub issue and link to this idea doc there—and keep that link when we record the work in [CHANGELOG.md](../CHANGELOG.md).*
 
 ---
 
