@@ -8,10 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- *(nothing yet)*
+- First-join spawn-egg gifting flow for Climp, controlled by config.
+- World-level `SavedData` tracker to grant the starter spawn egg once per player per world.
 
 ### Changed
-- *(nothing yet)*
+- `ClimpConfig` now exposes onboarding settings: `giveSpawnEggOnFirstJoin` and `preferredHotbarSlot`.
 
 ### Fixed
 - *(nothing yet)*

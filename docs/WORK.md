@@ -6,7 +6,7 @@ Working doc: current focus and tasks. Tasks can reference items in [BACKLOG.md](
 
 ## Current focus
 
-- *(Nothing in progress right now — MVP baseline is in place.)*
+- [ ] Implement spawn-egg gifting on first world join (→ BACKLOG.md § Spawn behavior)
 
 ## Tasks (backlog)
 
