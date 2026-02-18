@@ -6,8 +6,8 @@
 
 ## Active Work - [command_rod.md](backlog/command_rod.md)
 
-- [ ] test command rejection messaging variants (busy vs cooldown vs no Climp in range). Results:
-    - tbd
+- [x] test command rejection messaging variants (busy vs cooldown vs no Climp in range). Results:
+    - pass: distinct messages shown as expected for busy, cooldown, and no-in-range scenarios
 - [x] implement contextual command rejection messages (busy, cooldown, out-of-range) instead of one generic unavailable message
 - [ ] test emergency recall behavior (idle, moving, breaking, returning). Results:
     - tbd
