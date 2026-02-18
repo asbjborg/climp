@@ -4,14 +4,21 @@
 
 ---
 
-## Current focus
+## Active Work - [command_rod.md](backlog/command_rod.md)
 
-- [ ] Command rod (phase 2): slowly break the targeted log, then return to player — [command_rod.md](backlog/command_rod.md)
-
-## Tasks (backlog)
-
-- [ ] *(Add tasks here when we pick something from BACKLOG.md; link to the idea doc.)*
-
----
-
-*Example: "- [ ] Command rod item — [command_rod.md](backlog/command_rod.md)"*
+- [ ] test faster failure behavior. Results:
+    - tbd
+- [ ] make it fail faster when it can't reach the target instead of waiting for timeout
+- [x] test better reach and timeout behavior. results:
+    - climp can now reach to 4 blocks above and below where he stands
+    - still times out on unreachable targets, could be improved
+- [x] give climp better reach, so he can break logs at a distance above and below where he stands
+- [x] implement timeout and fallback handling to prevent Climp getting stuck in command-task states.
+- [x] test log breaking behavior
+    - success path:
+        - ground level:
+            - post ack. msg.
+            - breaks log
+            - returns and posts success msg.
+        - anything above ground level fails: climp gets stuck in "not available" state
+- [x] implement initial log breaking behavior as new task
