@@ -1,8 +1,8 @@
-# Vision – The Paperclip Imp
+# Vision – Climp
 
 ## Core Idea
 
-Create a small anthropomorphic paperclip companion that follows the player in Minecraft and provides:
+Create a small anthropomorphic paperclip companion named Climp that follows the player in Minecraft and provides:
 - Lighthearted commentary
 - Gentle exploration nudges
 - Emotional companionship
@@ -18,13 +18,36 @@ It is about presence.
 1. Rare beats often
     - Lines should feel like treasure, not noise.
 2. Curiosity over instruction
-    - The imp observes and wonders.
+    - Climp observes and wonders.
     - It never assigns tasks.
 3. Encourage without shaming
     - Defensive play is reframed as strategy.
     - Exploration is framed as curiosity.
 4. Companionship over efficiency
-    - The imp helps lightly, but never replaces core gameplay.
+    - Climp helps lightly, but never replaces core gameplay.
+
+⸻
+
+## Name
+
+Climp
+
+A fusion of "Clip" and "Imp."
+
+Climp is small, metallic, sarcastic, and surprisingly loyal.
+
+He does not serve.
+
+He accompanies.
+
+⸻
+
+## Character Traits
+- Curious
+- Mildly dramatic
+- Slightly sarcastic
+- Secretly protective
+- Easily impressed by shiny rocks
 
 ⸻
 

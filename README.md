@@ -1,13 +1,27 @@
-# Paperclip Imp
+# Climp
 
-A small sarcastic metallic companion for Minecraft (NeoForge 1.21.1).
+Climp is a small metallic companion that follows you through your Minecraft world, offering rare commentary, gentle nudges, and sarcastic observations.
 
-The Paperclip Imp follows you, observes your behavior, and occasionally comments on your survival decisions.
+He does not assign quests.
+
+He notices things.
+
+A sarcastic anthropomorphic paperclip companion for Minecraft (NeoForge 1.21.1).
 
 This is not a quest mod.
 This is not an automation mod.
 
 This is a companion.
+
+Optional flavor tagline:
+- "Climp. Moderately helpful. Structurally flexible."
+- "A paperclip forged for adventure."
+
+## Technical Note
+
+Use a stable base package namespace from the beginning:
+- `com.asbjborg.climp`
+- `dk.asbjborg.climp`
 
 ## Features (MVP)
 - Custom companion entity
@@ -18,7 +32,7 @@ This is a companion.
 
 ## Philosophy
 
-The Paperclip Imp is designed to:
+Climp is designed to:
 - Encourage exploration
 - Lighten tense moments
 - Provide subtle companionship
