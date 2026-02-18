@@ -17,7 +17,7 @@ public final class ClimpEntityTypes {
     public static final DeferredHolder<EntityType<?>, EntityType<ClimpEntity>> CLIMP = ENTITY_TYPES.register(
             "climp",
             () -> EntityType.Builder.of(ClimpEntity::new, MobCategory.CREATURE)
-                    .sized(0.6F, 0.9F)
+                    .sized(1.1F, 1.6F)
                     .build("climp:climp"));
 
     private ClimpEntityTypes() {

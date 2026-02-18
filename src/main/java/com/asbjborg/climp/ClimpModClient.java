@@ -1,6 +1,7 @@
 package com.asbjborg.climp;
 
 import com.asbjborg.climp.client.ClimpEntityRenderer;
+import com.asbjborg.climp.client.model.ClimpModel;
 import com.asbjborg.climp.entity.ClimpEntityTypes;
 
 import net.minecraft.client.Minecraft;
@@ -23,6 +24,7 @@ public class ClimpModClient {
         // Allows NeoForge to create a config screen for this mod's configs.
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
         modEventBus.addListener(this::registerEntityRenderers);
+        modEventBus.addListener(this::registerLayerDefinitions);
     }
 
     @SubscribeEvent
@@ -33,5 +35,9 @@ public class ClimpModClient {
 
     private void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ClimpEntityTypes.CLIMP.get(), ClimpEntityRenderer::new);
+    }
+
+    private void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(ClimpModel.LAYER_LOCATION, ClimpModel::createBodyLayer);
     }
 }
