@@ -6,9 +6,7 @@ import com.mojang.logging.LogUtils;
 import com.asbjborg.climp.entity.ClimpEntityTypes;
 import com.asbjborg.climp.item.ClimpItems;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.level.block.Blocks;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -16,6 +14,8 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import com.asbjborg.climp.event.ClimpPlayerEvents;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(ClimpMod.MODID)
@@ -31,6 +31,7 @@ public class ClimpMod {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::registerEntityAttributes);
         modEventBus.addListener(this::addCreativeTabEntries);
+        NeoForge.EVENT_BUS.addListener(ClimpPlayerEvents::onPlayerLoggedIn);
 
         // Register entity types.
         ClimpEntityTypes.ENTITY_TYPES.register(modEventBus);
@@ -41,15 +42,7 @@ public class ClimpMod {
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
-        // Some common setup code.
         LOGGER.info("CLIMP common setup initialized.");
-
-        if (ClimpConfig.LOG_DIRT_BLOCK.getAsBoolean()) {
-            LOGGER.info("DIRT BLOCK >> {}", BuiltInRegistries.BLOCK.getKey(Blocks.DIRT));
-        }
-
-        LOGGER.info("{}{}", ClimpConfig.MAGIC_NUMBER_INTRODUCTION.get(), ClimpConfig.MAGIC_NUMBER.getAsInt());
-        ClimpConfig.ITEM_STRINGS.get().forEach((item) -> LOGGER.info("ITEM >> {}", item));
     }
 
     private void registerEntityAttributes(EntityAttributeCreationEvent event) {
