@@ -25,8 +25,6 @@ This is the short- and long-term memory file for AI agents working on this proje
     - ordering rule: reverse chronological by insertion (new tasks are added at index 0 / top)
     - do not reorder or move existing tasks when updating notes/results; update them in place
     - for implementation-driven items, place the validation/check item immediately above the implementation item (bottom-up execution when reading)
-    - include commit IDs on task lines or directly below them when relevant (for traceability)
-    - expected cadence: commit implementation first, then do a tiny WORK update commit that records the hash on the related task
 - Keep `BACKLOG.md` for queued ideas and `CHANGELOG.md` for done/released work.
 - Commit often with small, understandable changesets.
 - Commit cadence (high priority):
@@ -34,7 +32,6 @@ This is the short- and long-term memory file for AI agents working on this proje
     - commit after each test-result-driven update (including WORK/CHANGELOG note updates)
     - prefer many small commits over large mixed commits
     - if uncertain, commit sooner rather than later
-- Reference commit IDs in docs/notes when it helps trace implementation decisions.
 - Release hygiene for `CHANGELOG.md`:
     - once a feature loop is verified/done, move its entries from `Unreleased` into the new version section immediately
     - reset `Unreleased` placeholders (`Added/Changed/Fixed`) after the cut
