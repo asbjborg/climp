@@ -7,7 +7,9 @@ import javax.annotation.Nullable;
 import com.asbjborg.climp.speech.ClimpSpeechManager;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
@@ -24,13 +26,23 @@ import net.minecraft.world.level.Level;
  */
 public class ClimpEntity extends PathfinderMob {
     private static final double COMMAND_TASK_RANGE_SQR = 16.0D * 16.0D;
-    private static final double COMMAND_TASK_REACH_SQR = 2.5D * 2.5D;
+    private static final double COMMAND_TASK_REACH_SQR = 3.0D * 3.0D;
+    private static final double COMMAND_RETURN_REACH_SQR = 3.0D * 3.0D;
+    private static final double COMMAND_APPROACH_FALLBACK_REACH_SQR = 4.5D * 4.5D;
+    private static final int COMMAND_BREAK_DURATION_TICKS = 40;
+    private static final int COMMAND_STAGE_TIMEOUT_TICKS = 20 * 20;
+    private static final int COMMAND_NO_PATH_FAIL_TICKS = 20 * 2;
 
     private final ClimpSpeechManager speechManager = new ClimpSpeechManager();
     @Nullable
     private BlockPos commandTargetPos;
     @Nullable
     private UUID commandRequesterId;
+    private CommandTaskStage commandTaskStage = CommandTaskStage.NONE;
+    private int commandBreakTicksRemaining;
+    private int commandStageTicks;
+    private int commandNoPathTicks;
+    private boolean commandTaskSucceeded;
 
     protected ClimpEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
         super(entityType, level);
@@ -66,7 +78,7 @@ public class ClimpEntity extends PathfinderMob {
     }
 
     public boolean assignLogTask(ServerPlayer requester, BlockPos targetPos) {
-        if (this.level().isClientSide || this.commandTargetPos != null) {
+        if (this.level().isClientSide || this.commandTaskStage != CommandTaskStage.NONE) {
             return false;
         }
 
@@ -76,12 +88,15 @@ public class ClimpEntity extends PathfinderMob {
 
         this.commandTargetPos = targetPos.immutable();
         this.commandRequesterId = requester.getUUID();
+        this.setCommandTaskStage(CommandTaskStage.TO_TARGET);
+        this.commandBreakTicksRemaining = 0;
+        this.commandTaskSucceeded = false;
         this.speechManager.onTaskStart(this, requester);
         return true;
     }
 
     public boolean hasCommandTask() {
-        return this.commandTargetPos != null;
+        return this.commandTaskStage != CommandTaskStage.NONE;
     }
 
     @Nullable
@@ -90,14 +105,73 @@ public class ClimpEntity extends PathfinderMob {
     }
 
     private void completeCommandTask() {
-        ServerPlayer requester = this.commandRequesterId == null ? null : this.level().getServer().getPlayerList().getPlayer(this.commandRequesterId);
+        this.clearBreakProgress();
+
+        ServerPlayer requester = this.getCommandRequester();
         if (requester != null && requester.level() == this.level()) {
-            this.speechManager.onTaskComplete(this, requester);
+            if (this.commandTaskSucceeded) {
+                this.speechManager.onTaskComplete(this, requester);
+            } else {
+                this.speechManager.onTaskFailed(this, requester);
+            }
         }
 
         this.commandTargetPos = null;
         this.commandRequesterId = null;
+        this.commandTaskStage = CommandTaskStage.NONE;
+        this.commandBreakTicksRemaining = 0;
+        this.commandStageTicks = 0;
+        this.commandTaskSucceeded = false;
         this.getNavigation().stop();
+    }
+
+    private boolean isTargetLog() {
+        return this.commandTargetPos != null && this.level().getBlockState(this.commandTargetPos).is(BlockTags.LOGS);
+    }
+
+    private void beginBreakingTarget() {
+        this.setCommandTaskStage(CommandTaskStage.BREAKING);
+        this.commandBreakTicksRemaining = COMMAND_BREAK_DURATION_TICKS;
+        this.getNavigation().stop();
+    }
+
+    private void markReturningToRequester(boolean succeeded) {
+        this.commandTaskSucceeded = succeeded;
+        this.setCommandTaskStage(CommandTaskStage.RETURNING);
+        this.commandBreakTicksRemaining = 0;
+        this.clearBreakProgress();
+    }
+
+    private void setCommandTaskStage(CommandTaskStage stage) {
+        this.commandTaskStage = stage;
+        this.commandStageTicks = 0;
+        this.commandNoPathTicks = 0;
+    }
+
+    private boolean incrementAndCheckStageTimeout() {
+        this.commandStageTicks++;
+        return this.commandStageTicks > COMMAND_STAGE_TIMEOUT_TICKS;
+    }
+
+    @Nullable
+    private ServerPlayer getCommandRequester() {
+        if (this.commandRequesterId == null || this.level().getServer() == null) {
+            return null;
+        }
+        return this.level().getServer().getPlayerList().getPlayer(this.commandRequesterId);
+    }
+
+    private void clearBreakProgress() {
+        if (this.commandTargetPos != null && this.level() instanceof ServerLevel serverLevel) {
+            serverLevel.destroyBlockProgress(this.getId(), this.commandTargetPos, -1);
+        }
+    }
+
+    private enum CommandTaskStage {
+        NONE,
+        TO_TARGET,
+        BREAKING,
+        RETURNING
     }
 
     private static final class CommandTargetGoal extends Goal {
@@ -113,28 +187,123 @@ public class ClimpEntity extends PathfinderMob {
 
         @Override
         public boolean canUse() {
-            return this.climp.getCommandTargetPos() != null;
+            return this.climp.hasCommandTask();
         }
 
         @Override
         public boolean canContinueToUse() {
-            return this.climp.getCommandTargetPos() != null;
+            return this.climp.hasCommandTask();
+        }
+
+        @Override
+        public void stop() {
+            this.climp.clearBreakProgress();
         }
 
         @Override
         public void tick() {
+            switch (this.climp.commandTaskStage) {
+                case TO_TARGET -> tickToTarget();
+                case BREAKING -> tickBreaking();
+                case RETURNING -> tickReturning();
+                case NONE -> {
+                    // No-op.
+                }
+            }
+        }
+
+        private void tickToTarget() {
             BlockPos target = this.climp.getCommandTargetPos();
             if (target == null) {
+                this.climp.completeCommandTask();
+                return;
+            }
+
+            if (!this.climp.isTargetLog()) {
+                this.climp.markReturningToRequester(false);
                 return;
             }
 
             this.climp.getLookControl().setLookAt(target.getX() + 0.5D, target.getY() + 0.5D, target.getZ() + 0.5D);
             if (--this.recalcPathTicks <= 0) {
-                this.recalcPathTicks = this.adjustedTickDelay(10);
+                this.recalcPathTicks = this.adjustedTickDelay(8);
                 this.climp.getNavigation().moveTo(target.getX() + 0.5D, target.getY(), target.getZ() + 0.5D, this.speedModifier);
             }
 
-            if (this.climp.distanceToSqr(target.getCenter()) <= COMMAND_TASK_REACH_SQR) {
+            double targetDistanceSqr = this.climp.distanceToSqr(target.getCenter());
+            if (targetDistanceSqr <= COMMAND_TASK_REACH_SQR
+                    || (this.climp.getNavigation().isDone() && targetDistanceSqr <= COMMAND_APPROACH_FALLBACK_REACH_SQR)) {
+                this.climp.beginBreakingTarget();
+                return;
+            }
+
+            if (this.climp.getNavigation().isDone() && targetDistanceSqr > COMMAND_APPROACH_FALLBACK_REACH_SQR) {
+                this.climp.commandNoPathTicks++;
+                if (this.climp.commandNoPathTicks >= COMMAND_NO_PATH_FAIL_TICKS) {
+                    this.climp.markReturningToRequester(false);
+                    return;
+                }
+            } else {
+                this.climp.commandNoPathTicks = 0;
+            }
+
+            if (this.climp.incrementAndCheckStageTimeout()) {
+                this.climp.markReturningToRequester(false);
+            }
+        }
+
+        private void tickBreaking() {
+            BlockPos target = this.climp.getCommandTargetPos();
+            if (target == null) {
+                this.climp.completeCommandTask();
+                return;
+            }
+
+            if (!this.climp.isTargetLog()) {
+                this.climp.markReturningToRequester(false);
+                return;
+            }
+
+            this.climp.getLookControl().setLookAt(target.getX() + 0.5D, target.getY() + 0.5D, target.getZ() + 0.5D);
+            if (this.climp.level() instanceof ServerLevel serverLevel) {
+                int elapsed = COMMAND_BREAK_DURATION_TICKS - this.climp.commandBreakTicksRemaining;
+                int progress = Math.min(9, (elapsed * 10) / COMMAND_BREAK_DURATION_TICKS);
+                serverLevel.destroyBlockProgress(this.climp.getId(), target, progress);
+            }
+
+            this.climp.commandBreakTicksRemaining--;
+            if (this.climp.commandBreakTicksRemaining <= 0) {
+                if (this.climp.level() instanceof ServerLevel serverLevel && this.climp.isTargetLog()) {
+                    serverLevel.destroyBlock(target, true, this.climp);
+                }
+                this.climp.markReturningToRequester(true);
+                return;
+            }
+
+            if (this.climp.incrementAndCheckStageTimeout()) {
+                this.climp.markReturningToRequester(false);
+            }
+        }
+
+        private void tickReturning() {
+            ServerPlayer requester = this.climp.getCommandRequester();
+            if (requester == null || requester.level() != this.climp.level() || !requester.isAlive()) {
+                this.climp.completeCommandTask();
+                return;
+            }
+
+            this.climp.getLookControl().setLookAt(requester, 18.0F, this.climp.getMaxHeadXRot());
+            if (--this.recalcPathTicks <= 0) {
+                this.recalcPathTicks = this.adjustedTickDelay(8);
+                this.climp.getNavigation().moveTo(requester, this.speedModifier);
+            }
+
+            if (this.climp.distanceToSqr(requester) <= COMMAND_RETURN_REACH_SQR) {
+                this.climp.completeCommandTask();
+                return;
+            }
+
+            if (this.climp.incrementAndCheckStageTimeout()) {
                 this.climp.completeCommandTask();
             }
         }

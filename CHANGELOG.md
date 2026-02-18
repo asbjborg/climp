@@ -15,13 +15,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `command_rod` item (tools tab) with placeholder handheld model.
 - Command assignment flow: right-click a log to assign the nearest available Climp a single target task.
 - Task speech lines for start/completion (`TASK_START`, `TASK_COMPLETE`).
+- Phase 2 command behavior: Climp slowly breaks the targeted log, then returns to the requesting player before completing the task.
+- Climp AI now prioritizes an active command target before normal follow behavior.
+- Explicit command task outcomes: successful tasks send completion lines, failed tasks send failure lines.
+- Timeout and fallback handling to prevent Climp getting stuck in command-task states.
+- Fast unreachable-target detection for stalled pathing, so impossible command targets fail sooner.
+- Verified in-game: command rod on non-log blocks does nothing.
+- Verified in-game: command rod on logs assigns nearest available Climp; Climp sends start + completion lines.
+- Verified in-game: when no Climp is available, player receives an explicit unavailable message.
 
 ### Changed
-- Climp AI now prioritizes an active command target before normal follow behavior.
-- Verified in-game behavior:
-  - Command rod on non-log blocks does nothing.
-  - Command rod on logs assigns nearest available Climp; Climp sends start + completion lines.
-  - When no Climp is available, player receives an explicit unavailable message.
+- *(nothing yet)*
 
 ### Fixed
 - *(nothing yet)*

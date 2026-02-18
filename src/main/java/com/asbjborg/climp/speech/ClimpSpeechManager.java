@@ -51,6 +51,14 @@ public final class ClimpSpeechManager {
         idleCooldownTicks = Math.max(idleCooldownTicks, 20 * 10);
     }
 
+    public void onTaskFailed(ClimpEntity climp, ServerPlayer player) {
+        if (climp.level().isClientSide) {
+            return;
+        }
+        send(player, ClimpSpeechLibrary.randomLine(ClimpSpeechType.TASK_FAILED, climp.getRandom()));
+        idleCooldownTicks = Math.max(idleCooldownTicks, 20 * 10);
+    }
+
     private void tryIdleSpeech(ClimpEntity climp) {
         if (climp.level().isClientSide || idleCooldownTicks-- > 0) {
             return;

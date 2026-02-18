@@ -24,7 +24,11 @@ public final class ClimpSpeechLibrary {
             ClimpSpeechType.TASK_COMPLETE, List.of(
                     "Objective achieved. You are welcome.",
                     "Task complete. I await further questionable directives.",
-                    "Objective concluded. Dignity mostly intact."));
+                    "Objective concluded. Dignity mostly intact."),
+            ClimpSpeechType.TASK_FAILED, List.of(
+                    "Task update: that did not go according to my narrative.",
+                    "Objective unresolved. External circumstances blamed.",
+                    "I regret to report a professional non-success."));
 
     private ClimpSpeechLibrary() {
     }
