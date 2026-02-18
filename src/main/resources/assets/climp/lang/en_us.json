@@ -1,0 +1,9 @@
+{
+  "climp.configuration.title": "Climp Configs",
+  "climp.configuration.section.climp.common.toml": "Climp Configs",
+  "climp.configuration.section.climp.common.toml.title": "Climp Configs",
+  "climp.configuration.items": "Item List",
+  "climp.configuration.logDirtBlock": "Log Dirt Block",
+  "climp.configuration.magicNumberIntroduction": "Magic Number Text",
+  "climp.configuration.magicNumber": "Magic Number"
+}
