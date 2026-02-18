@@ -1,6 +1,9 @@
 package com.asbjborg.climp.entity;
 
 import java.util.EnumSet;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
@@ -26,9 +29,9 @@ import net.minecraft.world.level.Level;
  */
 public class ClimpEntity extends PathfinderMob {
     private static final double COMMAND_TASK_RANGE_SQR = 16.0D * 16.0D;
-    private static final double COMMAND_TASK_REACH_SQR = 3.0D * 3.0D;
+    private static final double COMMAND_TASK_REACH_BLOCKS = 3.0D;
     private static final double COMMAND_RETURN_REACH_SQR = 3.0D * 3.0D;
-    private static final double COMMAND_APPROACH_FALLBACK_REACH_SQR = 4.5D * 4.5D;
+    private static final double COMMAND_APPROACH_FALLBACK_REACH_BLOCKS = 4.5D;
     private static final int COMMAND_BREAK_DURATION_TICKS = 40;
     private static final int COMMAND_TASK_COOLDOWN_TICKS = 20 * 3;
     private static final int COMMAND_STAGE_TIMEOUT_TICKS = 20 * 20;
@@ -37,6 +40,7 @@ public class ClimpEntity extends PathfinderMob {
     private final ClimpSpeechManager speechManager = new ClimpSpeechManager();
     @Nullable
     private BlockPos commandTargetPos;
+    private final Deque<BlockPos> commandQueuedTargets = new ArrayDeque<>();
     @Nullable
     private UUID commandRequesterId;
     private CommandTaskStage commandTaskStage = CommandTaskStage.NONE;
@@ -46,6 +50,8 @@ public class ClimpEntity extends PathfinderMob {
     private int commandCooldownTicks;
     private boolean commandTaskSucceeded;
     private boolean commandRecallRequested;
+    private boolean commandScanChompMode;
+    private int commandClusterAnchorY;
     private ClimpSpeechManager.TaskFailureReason commandTaskFailureReason = ClimpSpeechManager.TaskFailureReason.UNREACHABLE;
 
     protected ClimpEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
@@ -85,16 +91,31 @@ public class ClimpEntity extends PathfinderMob {
     }
 
     public boolean assignLogTask(ServerPlayer requester, BlockPos targetPos) {
+        return this.assignLogTask(requester, List.of(targetPos));
+    }
+
+    public boolean assignLogTask(ServerPlayer requester, List<BlockPos> targetPositions) {
         if (this.level().isClientSide || !this.canAcceptCommandTask()) {
             return false;
         }
 
+        if (targetPositions.isEmpty()) {
+            return false;
+        }
+
+        BlockPos targetPos = targetPositions.get(0).immutable();
         if (this.distanceToSqr(targetPos.getCenter()) > COMMAND_TASK_RANGE_SQR) {
             return false;
         }
 
         this.commandTargetPos = targetPos.immutable();
+        this.commandQueuedTargets.clear();
+        for (int i = 1; i < targetPositions.size(); i++) {
+            this.commandQueuedTargets.addLast(targetPositions.get(i).immutable());
+        }
         this.commandRequesterId = requester.getUUID();
+        this.commandScanChompMode = targetPositions.size() > 1;
+        this.commandClusterAnchorY = targetPos.getY();
         this.setCommandTaskStage(CommandTaskStage.TO_TARGET);
         this.commandBreakTicksRemaining = 0;
         this.commandTaskSucceeded = false;
@@ -119,6 +140,9 @@ public class ClimpEntity extends PathfinderMob {
         this.commandTaskFailureReason = ClimpSpeechManager.TaskFailureReason.UNREACHABLE;
         this.setCommandTaskStage(CommandTaskStage.RETURNING);
         this.commandBreakTicksRemaining = 0;
+        this.commandQueuedTargets.clear();
+        this.commandScanChompMode = false;
+        this.commandClusterAnchorY = 0;
         this.clearBreakProgress();
         this.getNavigation().stop();
         return true;
@@ -150,12 +174,15 @@ public class ClimpEntity extends PathfinderMob {
         }
 
         this.commandTargetPos = null;
+        this.commandQueuedTargets.clear();
         this.commandRequesterId = null;
         this.commandTaskStage = CommandTaskStage.NONE;
         this.commandBreakTicksRemaining = 0;
         this.commandStageTicks = 0;
         this.commandTaskSucceeded = false;
         this.commandRecallRequested = false;
+        this.commandScanChompMode = false;
+        this.commandClusterAnchorY = 0;
         this.commandTaskFailureReason = ClimpSpeechManager.TaskFailureReason.UNREACHABLE;
         this.commandCooldownTicks = COMMAND_TASK_COOLDOWN_TICKS;
         this.getNavigation().stop();
@@ -179,6 +206,38 @@ public class ClimpEntity extends PathfinderMob {
         this.setCommandTaskStage(CommandTaskStage.RETURNING);
         this.commandBreakTicksRemaining = 0;
         this.clearBreakProgress();
+    }
+
+    private boolean advanceToNextQueuedTarget() {
+        this.clearBreakProgress();
+        while (!this.commandQueuedTargets.isEmpty()) {
+            BlockPos nextTarget = this.commandQueuedTargets.removeFirst();
+            if (this.level().getBlockState(nextTarget).is(BlockTags.LOGS)) {
+                this.commandTargetPos = nextTarget;
+                this.setCommandTaskStage(CommandTaskStage.TO_TARGET);
+                this.commandBreakTicksRemaining = 0;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private double getEffectiveTaskReachSqr(BlockPos target) {
+        return this.getScaledReachSqr(COMMAND_TASK_REACH_BLOCKS, target);
+    }
+
+    private double getEffectiveApproachFallbackReachSqr(BlockPos target) {
+        return this.getScaledReachSqr(COMMAND_APPROACH_FALLBACK_REACH_BLOCKS, target);
+    }
+
+    private double getScaledReachSqr(double baseReachBlocks, BlockPos target) {
+        if (!this.commandScanChompMode) {
+            return baseReachBlocks * baseReachBlocks;
+        }
+
+        int extraReachByHeight = Math.max(0, target.getY() - this.commandClusterAnchorY);
+        double scaledReachBlocks = baseReachBlocks + extraReachByHeight;
+        return scaledReachBlocks * scaledReachBlocks;
     }
 
     private void setCommandTaskStage(CommandTaskStage stage) {
@@ -259,7 +318,9 @@ public class ClimpEntity extends PathfinderMob {
             }
 
             if (!this.climp.isTargetLog()) {
-                this.climp.markReturningToRequester(false, ClimpSpeechManager.TaskFailureReason.TARGET_REMOVED);
+                if (!this.climp.advanceToNextQueuedTarget()) {
+                    this.climp.markReturningToRequester(true, ClimpSpeechManager.TaskFailureReason.UNREACHABLE);
+                }
                 return;
             }
 
@@ -270,13 +331,15 @@ public class ClimpEntity extends PathfinderMob {
             }
 
             double targetDistanceSqr = this.climp.distanceToSqr(target.getCenter());
-            if (targetDistanceSqr <= COMMAND_TASK_REACH_SQR
-                    || (this.climp.getNavigation().isDone() && targetDistanceSqr <= COMMAND_APPROACH_FALLBACK_REACH_SQR)) {
+            double effectiveTaskReachSqr = this.climp.getEffectiveTaskReachSqr(target);
+            double effectiveFallbackReachSqr = this.climp.getEffectiveApproachFallbackReachSqr(target);
+            if (targetDistanceSqr <= effectiveTaskReachSqr
+                    || (this.climp.getNavigation().isDone() && targetDistanceSqr <= effectiveFallbackReachSqr)) {
                 this.climp.beginBreakingTarget();
                 return;
             }
 
-            if (this.climp.getNavigation().isDone() && targetDistanceSqr > COMMAND_APPROACH_FALLBACK_REACH_SQR) {
+            if (this.climp.getNavigation().isDone() && targetDistanceSqr > effectiveFallbackReachSqr) {
                 this.climp.commandNoPathTicks++;
                 if (this.climp.commandNoPathTicks >= COMMAND_NO_PATH_FAIL_TICKS) {
                     this.climp.markReturningToRequester(false, ClimpSpeechManager.TaskFailureReason.UNREACHABLE);
@@ -299,7 +362,9 @@ public class ClimpEntity extends PathfinderMob {
             }
 
             if (!this.climp.isTargetLog()) {
-                this.climp.markReturningToRequester(false, ClimpSpeechManager.TaskFailureReason.TARGET_REMOVED);
+                if (!this.climp.advanceToNextQueuedTarget()) {
+                    this.climp.markReturningToRequester(true, ClimpSpeechManager.TaskFailureReason.UNREACHABLE);
+                }
                 return;
             }
 
@@ -315,7 +380,9 @@ public class ClimpEntity extends PathfinderMob {
                 if (this.climp.level() instanceof ServerLevel serverLevel && this.climp.isTargetLog()) {
                     serverLevel.destroyBlock(target, true, this.climp);
                 }
-                this.climp.markReturningToRequester(true, ClimpSpeechManager.TaskFailureReason.UNREACHABLE);
+                if (!this.climp.advanceToNextQueuedTarget()) {
+                    this.climp.markReturningToRequester(true, ClimpSpeechManager.TaskFailureReason.UNREACHABLE);
+                }
                 return;
             }
 

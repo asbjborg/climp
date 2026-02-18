@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `command_rod` item (tools tab) with placeholder handheld model.
-- Command assignment flow: right-click a log to assign the nearest available Climp a single target task.
+- Command assignment flow: right-click a log to assign the nearest available Climp a tree-cluster task queue.
 - Task speech lines for start/completion (`TASK_START`, `TASK_COMPLETE`).
 - Phase 2 command behavior: Climp slowly breaks the targeted log, then returns to the requesting player before completing the task.
 - Climp AI now prioritizes an active command target before normal follow behavior.
@@ -24,6 +24,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Short command-task cooldown after task resolution to reduce command spam.
 - Contextual command rejection messages that distinguish busy, cooldown, and no-Climp-in-range cases.
 - Shift-rightclick emergency recall that aborts an active command task and immediately returns Climp to the player.
+- Tree-cluster targeting from clicked logs: connected-log scan (including corner connections), safety cap, and ground-nearest anchor selection.
+- Phase 3b tree chomp flow: after the anchor log breaks, Climp chains through remaining logs in the discovered cluster (up to 100 logs total per command) before returning.
+- Command-task scan safety limit aligned with the per-command tree-chomp cap at 100 logs.
+- In tree scan-chomp mode, effective command reach scales by +1 per +1 Y above the cluster anchor to improve tall-tree crown cleanup.
+- Command-rod tree behavior is now configurable: `commandTreeScanLimit` (default 100) and `commandTreeBreakLimit` (default 100).
+- Optional `commandTreeScanDebugMessages` config prints scanned/queued log counts for tree-size tuning.
 - Verified in-game: command rod on non-log blocks does nothing.
 - Verified in-game: command rod on logs assigns nearest available Climp; Climp sends start + completion lines.
 - Verified in-game: when no Climp is available, player receives an explicit unavailable message.

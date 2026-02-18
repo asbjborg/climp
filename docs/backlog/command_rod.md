@@ -4,7 +4,8 @@
 
 - Phase 1 complete (`fb599b8`): command rod item, log targeting, nearest-Climp assignment, start/completion lines.
 - Phase 2 complete (`e03b247`): slow log breaking, return behavior, explicit fail outcomes, and recovery from unreachable targets.
-- Next (phase 3): tree-cluster aware targeting from clicked log (connected-log scan + safety cap + ground-nearest anchor selection).
+- Phase 3 complete: tree-cluster targeting from clicked log (connected-log scan, safety cap, ground-nearest anchor as first target).
+- Next (phase 3b): whole-tree chomp — after breaking the anchor log, continue with remaining logs in the cluster (e.g. ascending Y) until cluster is cleared or cap reached (~100 logs per command).
 
 ---
 
@@ -14,8 +15,11 @@ Intent:
 - Click any log in a tree, then resolve a smarter target from that tree instead of relying on arbitrary vertical assumptions.
 
 Planned rules:
-- Scan connected logs starting from clicked log (including corner/diagonal neighbors) with a strict max-node safety cap.
+- Scan connected logs starting from clicked log (including corner/diagonal neighbors) with a strict max-node safety cap (configurable; default 100).
 - Select a ground-nearest anchor log from the discovered cluster as the first actionable target.
+- Phase 3b: After each log is broken, assign the next log in the cluster (e.g. lowest remaining) until the tree is cleared or break cap (configurable; default 100) is reached.
+- Phase 3b reach scaling: in scan-chomp mode, effective task reach grows by +1 block per +1 Y above the anchor log to reduce lingering unreachable crowns.
+- Optional debug mode prints scanned/queued log counts for tuning tree limits.
 - If scan exceeds safety cap, fail gracefully with a clear message and do not lock Climp.
 - Keep command-task state recoverable at all times (no stuck "busy" state).
 - Commanded log drops are carried back and delivered near the player instead of being left at the break position.
@@ -79,7 +83,7 @@ Tone example:
 
 ## Future Expansion Ideas
 
-- Chop small tree clusters (max 5 logs).
+- Tune tree cluster scan/break caps via configs as worlds and play styles vary.
 - Mine single ore block.
 - Fetch dropped item.
 - Light area with torches.
