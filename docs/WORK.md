@@ -21,8 +21,8 @@
 - [ ] test command task cooldown behavior. Results:
     - tbd
 - [ ] implement command task cooldown (short lockout after finish/fail to prevent spam)
-- [ ] test failure reason messaging variants. Results:
-    - tbd
+- [x] test failure reason messaging variants. Results:
+    - works: target-removed and unreachable cases produce distinct failure lines, both confirmed in-game
 - [x] implement task-specific failure reason variants (unreachable vs target removed) for clearer feedback (commit: `9acc37a`)
 - [x] test faster failure behavior. Results:
     - unreachable target gives up in about 5 seconds and Climp recovers correctly
