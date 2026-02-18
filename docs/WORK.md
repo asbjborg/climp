@@ -11,7 +11,7 @@
 - [x] implement contextual command rejection messages (busy, cooldown, out-of-range) instead of one generic unavailable message
 - [ ] test emergency recall behavior (idle, moving, breaking, returning). Results:
     - tbd
-- [ ] implement shift-rightclick emergency recall: abort active task immediately, return to player, and unload any carried drops
+- [x] implement shift-rightclick emergency recall: abort active task immediately, return to player, and unload any carried drops
 - [ ] test carry return behavior. Results:
     - tbd
 - [ ] implement log-carry return behavior: collect drops from commanded break and deliver to player on return (do not leave drops at stump)

@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fast unreachable-target detection for stalled pathing, so impossible command targets fail sooner.
 - Short command-task cooldown after task resolution to reduce command spam.
 - Contextual command rejection messages that distinguish busy, cooldown, and no-Climp-in-range cases.
+- Shift-rightclick emergency recall that aborts an active command task and immediately returns Climp to the player.
 - Verified in-game: command rod on non-log blocks does nothing.
 - Verified in-game: command rod on logs assigns nearest available Climp; Climp sends start + completion lines.
 - Verified in-game: when no Climp is available, player receives an explicit unavailable message.
