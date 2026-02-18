@@ -6,7 +6,8 @@
 - Phase 2 complete (`e03b247`): slow log breaking, return behavior, explicit fail outcomes, and recovery from unreachable targets.
 - Phase 3 complete: tree-cluster targeting from clicked log (connected-log scan, safety cap, ground-nearest anchor as first target).
 - Phase 3b complete: whole-tree chomp — after breaking the anchor log, continue with remaining logs in the cluster (e.g. ascending Y) until cluster is cleared or cap reached (~100 logs per command).
-- Next (phase 4): in-game runtime config commands for command-rod tuning (`/climp config ...`) without relog.
+- Phase 4 complete: in-game runtime config commands for command-rod tuning (`/climp config ...`) without relog.
+- Phase 4b complete: command-edited runtime tree config persists per world and reapplies on server start.
 
 ---
 
@@ -30,6 +31,9 @@ Planned rules:
     - `/climp config set commandTreeScanLimit <int>`
     - `/climp config set commandTreeBreakLimit <int>`
     - `/climp config set commandTreeScanDebugMessages <true|false>`
+- Phase 4b persistence:
+    - Runtime command edits are saved in world data.
+    - Persisted runtime values are automatically reapplied on server start.
 
 ---
 

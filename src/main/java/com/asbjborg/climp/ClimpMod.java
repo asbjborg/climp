@@ -34,6 +34,7 @@ public class ClimpMod {
         modEventBus.addListener(this::addCreativeTabEntries);
         NeoForge.EVENT_BUS.addListener(ClimpPlayerEvents::onPlayerLoggedIn);
         NeoForge.EVENT_BUS.addListener(ClimpCommandEvents::onRegisterCommands);
+        NeoForge.EVENT_BUS.addListener(ClimpCommandEvents::onServerStarted);
 
         // Register entity types.
         ClimpEntityTypes.ENTITY_TYPES.register(modEventBus);
