@@ -36,7 +36,7 @@ public final class CommandRodItem extends Item {
         List<ClimpEntity> nearbyClimps = level.getEntitiesOfClass(
                 ClimpEntity.class,
                 player.getBoundingBox().inflate(SEARCH_RADIUS),
-                climp -> climp.isAlive() && !climp.hasCommandTask());
+                climp -> climp.isAlive() && climp.canAcceptCommandTask());
         ClimpEntity nearestClimp = nearbyClimps.stream()
                 .min(Comparator.comparingDouble(climp -> climp.distanceToSqr(player)))
                 .orElse(null);

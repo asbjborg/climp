@@ -30,6 +30,7 @@ public class ClimpEntity extends PathfinderMob {
     private static final double COMMAND_RETURN_REACH_SQR = 3.0D * 3.0D;
     private static final double COMMAND_APPROACH_FALLBACK_REACH_SQR = 4.5D * 4.5D;
     private static final int COMMAND_BREAK_DURATION_TICKS = 40;
+    private static final int COMMAND_TASK_COOLDOWN_TICKS = 20 * 3;
     private static final int COMMAND_STAGE_TIMEOUT_TICKS = 20 * 20;
     private static final int COMMAND_NO_PATH_FAIL_TICKS = 20 * 2;
 
@@ -42,6 +43,7 @@ public class ClimpEntity extends PathfinderMob {
     private int commandBreakTicksRemaining;
     private int commandStageTicks;
     private int commandNoPathTicks;
+    private int commandCooldownTicks;
     private boolean commandTaskSucceeded;
     private ClimpSpeechManager.TaskFailureReason commandTaskFailureReason = ClimpSpeechManager.TaskFailureReason.UNREACHABLE;
 
@@ -63,6 +65,9 @@ public class ClimpEntity extends PathfinderMob {
     public void aiStep() {
         super.aiStep();
         this.speechManager.tick(this);
+        if (this.commandCooldownTicks > 0) {
+            this.commandCooldownTicks--;
+        }
     }
 
     @Override
@@ -79,7 +84,7 @@ public class ClimpEntity extends PathfinderMob {
     }
 
     public boolean assignLogTask(ServerPlayer requester, BlockPos targetPos) {
-        if (this.level().isClientSide || this.commandTaskStage != CommandTaskStage.NONE) {
+        if (this.level().isClientSide || !this.canAcceptCommandTask()) {
             return false;
         }
 
@@ -99,6 +104,10 @@ public class ClimpEntity extends PathfinderMob {
 
     public boolean hasCommandTask() {
         return this.commandTaskStage != CommandTaskStage.NONE;
+    }
+
+    public boolean canAcceptCommandTask() {
+        return this.commandTaskStage == CommandTaskStage.NONE && this.commandCooldownTicks <= 0;
     }
 
     @Nullable
@@ -125,6 +134,7 @@ public class ClimpEntity extends PathfinderMob {
         this.commandStageTicks = 0;
         this.commandTaskSucceeded = false;
         this.commandTaskFailureReason = ClimpSpeechManager.TaskFailureReason.UNREACHABLE;
+        this.commandCooldownTicks = COMMAND_TASK_COOLDOWN_TICKS;
         this.getNavigation().stop();
     }
 
