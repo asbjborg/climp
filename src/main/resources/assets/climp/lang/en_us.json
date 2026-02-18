@@ -1,4 +1,6 @@
 {
+  "item.climp.climp_spawn_egg": "Climp Spawn Egg",
+
   "climp.configuration.title": "Climp Configs",
   "climp.configuration.section.climp.common.toml": "Climp Configs",
   "climp.configuration.section.climp.common.toml.title": "Climp Configs",
