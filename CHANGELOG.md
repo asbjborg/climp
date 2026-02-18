@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- *(nothing yet)*
+
+### Changed
+- *(nothing yet)*
+
+### Fixed
+- *(nothing yet)*
+
+---
+
+## [0.3.0] - 2026-02-18
+
 **Based on:** [command_rod.md](docs/backlog/command_rod.md)
 
 ### Added
@@ -68,6 +81,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Voice lines:** Rare idle chat lines and hit-response lines (no diamond-ore trigger yet).
 - **Docs:** BACKLOG.md (idea dump), WORK.md (tasks linked to backlog), CHANGELOG.md (this file); README links to all three.
 
-[Unreleased]: https://github.com/asbjborg/climp/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/asbjborg/climp/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/asbjborg/climp/releases/tag/v0.3.0
 [0.2.0]: https://github.com/asbjborg/climp/releases/tag/v0.2.0
 [0.1.0]: https://github.com/asbjborg/climp/releases/tag/v0.1.0
