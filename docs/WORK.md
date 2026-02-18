@@ -8,12 +8,12 @@
 
 - [ ] test faster failure behavior. Results:
     - tbd
-- [ ] make it fail faster when it can't reach the target instead of waiting for timeout
+- [x] make it fail faster when it can't reach the target instead of waiting for timeout (commit: `e03b247`)
 - [x] test better reach and timeout behavior. results:
     - climp can now reach to 4 blocks above and below where he stands
     - still times out on unreachable targets, could be improved
-- [x] give climp better reach, so he can break logs at a distance above and below where he stands
-- [x] implement timeout and fallback handling to prevent Climp getting stuck in command-task states.
+- [x] give climp better reach, so he can break logs at a distance above and below where he stands (commit: `e03b247`)
+- [x] implement timeout and fallback handling to prevent Climp getting stuck in command-task states. (commit: `e03b247`)
 - [x] test log breaking behavior
     - success path:
         - ground level:
@@ -21,4 +21,4 @@
             - breaks log
             - returns and posts success msg.
         - anything above ground level fails: climp gets stuck in "not available" state
-- [x] implement initial log breaking behavior as new task
+- [x] implement initial log breaking behavior as new task (commit: `e03b247`)
