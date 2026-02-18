@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - `ClimpConfig` now exposes onboarding settings: `giveSpawnEggOnFirstJoin` and `preferredHotbarSlot`.
+- Verified behavior in-game: first world join grants one spawn egg, relogging does not grant duplicates.
 
 ### Fixed
 - *(nothing yet)*
