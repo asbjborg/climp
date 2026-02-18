@@ -110,6 +110,10 @@ public class ClimpEntity extends PathfinderMob {
         return this.commandTaskStage == CommandTaskStage.NONE && this.commandCooldownTicks <= 0;
     }
 
+    public boolean isOnCommandCooldown() {
+        return this.commandTaskStage == CommandTaskStage.NONE && this.commandCooldownTicks > 0;
+    }
+
     @Nullable
     private BlockPos getCommandTargetPos() {
         return this.commandTargetPos;

@@ -36,17 +36,36 @@ public final class CommandRodItem extends Item {
         List<ClimpEntity> nearbyClimps = level.getEntitiesOfClass(
                 ClimpEntity.class,
                 player.getBoundingBox().inflate(SEARCH_RADIUS),
-                climp -> climp.isAlive() && climp.canAcceptCommandTask());
-        ClimpEntity nearestClimp = nearbyClimps.stream()
+                ClimpEntity::isAlive);
+
+        if (nearbyClimps.isEmpty()) {
+            player.sendSystemMessage(Component.literal("Climp: No Climp in range."));
+            return InteractionResult.SUCCESS;
+        }
+
+        ClimpEntity nearestReadyClimp = nearbyClimps.stream()
+                .filter(ClimpEntity::canAcceptCommandTask)
                 .min(Comparator.comparingDouble(climp -> climp.distanceToSqr(player)))
                 .orElse(null);
 
-        if (nearestClimp == null) {
+        if (nearestReadyClimp == null) {
+            boolean hasBusyClimp = nearbyClimps.stream().anyMatch(ClimpEntity::hasCommandTask);
+            if (hasBusyClimp) {
+                player.sendSystemMessage(Component.literal("Climp: I am busy with a task right now."));
+                return InteractionResult.SUCCESS;
+            }
+
+            boolean hasCoolingClimp = nearbyClimps.stream().anyMatch(ClimpEntity::isOnCommandCooldown);
+            if (hasCoolingClimp) {
+                player.sendSystemMessage(Component.literal("Climp: Brief cooldown. Dramatic pause in progress."));
+                return InteractionResult.SUCCESS;
+            }
+
             player.sendSystemMessage(Component.literal("Climp: No available Climp in range."));
             return InteractionResult.SUCCESS;
         }
 
-        if (!nearestClimp.assignLogTask(player, clickedPos)) {
+        if (!nearestReadyClimp.assignLogTask(player, clickedPos)) {
             player.sendSystemMessage(Component.literal("Climp: I cannot reach that task target."));
             return InteractionResult.SUCCESS;
         }
