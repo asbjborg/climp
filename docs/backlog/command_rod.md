@@ -1,5 +1,12 @@
 # Command Rod / Adventuring Stick
 
+## Implementation Status
+
+- Phase 1 complete (`fb599b8`): command rod item, log targeting, nearest-Climp assignment, start/completion lines.
+- Next (phase 2): slow single-log breaking on arrival, then return behavior.
+
+---
+
 ## Concept
 
 A simple, elegant item that allows the player to direct Climp to perform small, single-target tasks.

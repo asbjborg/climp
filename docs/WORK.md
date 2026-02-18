@@ -6,7 +6,7 @@
 
 ## Current focus
 
-- *(No active tasks right now.)*
+- [ ] Command rod (phase 2): slowly break the targeted log, then return to player — [command_rod.md](backlog/command_rod.md)
 
 ## Tasks (backlog)
 

@@ -12,9 +12,10 @@ This is the short- and long-term memory file for AI agents working on this proje
      - add/adjust tasks in `docs/WORK.md`
      - implement or modify code
      - record delivered changes under `Unreleased` in `CHANGELOG.md`, **including a link to the idea doc** (e.g. “Based on: …” per version or per feature)
-     - repeat until no active tasks remain for the feature
-  4. Stamp a version and release once the feature loop is complete; then **remove** the task from `WORK.md` (do not leave it struck—WORK is in-progress only, no history).
-- `WORK.md` is **only** in-progress: a todo list while an idea is active. Once something is done, in CHANGELOG, and released, remove it from WORK. No done/done buckets, no struck items.
+     - repeat until the **idea** (not just a sub-step) is complete
+  4. Stamp a version and release once the full idea loop is complete; then **remove** the task from `WORK.md` (do not leave it struck—WORK is in-progress only, no history).
+- `WORK.md` is **only** in-progress: a todo list while an idea is active. Multi-step ideas stay in WORK across phases until fully released.
+- Do not clear an idea from `WORK.md` after a partial implementation slice; instead update the active line to the next phase/scope.
 - Keep `BACKLOG.md` for queued ideas and `CHANGELOG.md` for done/released work.
 - Commit often with small, understandable changesets.
 - Reference commit IDs in docs/notes when it helps trace implementation decisions.
