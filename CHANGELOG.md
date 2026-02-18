@@ -10,6 +10,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- *(nothing yet)*
+
+### Changed
+- *(nothing yet)*
+
+### Fixed
+- *(nothing yet)*
+
+---
+
+## [0.3.1] - 2026-02-18
+
+### Added
 - Runtime command-rod tuning commands: `/climp config show` and `/climp config set ...` for scan limit, break limit, and scan debug toggle. (#9)
 - Operator-gated config editing in-game (permission level 2+) with immediate feedback on updated values. (#9)
 - Runtime command-edited tree config now persists per world using `SavedData` and survives restarts. (#10)
@@ -86,7 +99,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Voice lines:** Rare idle chat lines and hit-response lines (no diamond-ore trigger yet).
 - **Docs:** BACKLOG.md (idea dump), WORK.md (tasks linked to backlog), CHANGELOG.md (this file); README links to all three.
 
-[Unreleased]: https://github.com/asbjborg/climp/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/asbjborg/climp/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/asbjborg/climp/releases/tag/v0.3.1
 [0.3.0]: https://github.com/asbjborg/climp/releases/tag/v0.3.0
 [0.2.0]: https://github.com/asbjborg/climp/releases/tag/v0.2.0
 [0.1.0]: https://github.com/asbjborg/climp/releases/tag/v0.1.0
