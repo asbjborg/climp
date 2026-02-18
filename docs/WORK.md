@@ -20,7 +20,7 @@
 - [ ] implement tree-cluster targeting from a clicked log: scan connected logs with safety cap, then select a ground-nearest anchor log as first target
 - [ ] test command task cooldown behavior. Results:
     - tbd
-- [ ] implement command task cooldown (short lockout after finish/fail to prevent spam)
+- [x] implement command task cooldown (short lockout after finish/fail to prevent spam)
 - [x] test failure reason messaging variants. Results:
     - works: target-removed and unreachable cases produce distinct failure lines, both confirmed in-game
 - [x] implement task-specific failure reason variants (unreachable vs target removed) for clearer feedback (commit: `9acc37a`)
