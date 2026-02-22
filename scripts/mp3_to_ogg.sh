@@ -1,12 +1,18 @@
 #!/usr/bin/env bash
 # Convert MP3 files in assets/climp/sounds/ to OGG (Vorbis).
-# Usage: Drop MP3s into src/main/resources/assets/climp/sounds/, then run:
-#   ./scripts/mp3_to_ogg.sh
+# Usage:
+#   ./scripts/mp3_to_ogg.sh           # Convert only MP3s with no existing .ogg
+#   ./scripts/mp3_to_ogg.sh --all     # Regenerate all .ogg files from MP3s
 #
 # Requires sox (recommended) or ffmpeg with libvorbis:
 #   brew install sox
 
 set -e
+
+REGENERATE_ALL=false
+if [[ "${1:-}" == "--all" || "${1:-}" == "-a" ]]; then
+  REGENERATE_ALL=true
+fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SOUNDS_DIR="$(cd "$SCRIPT_DIR/../src/main/resources/assets/climp/sounds" && pwd)"
@@ -45,14 +51,18 @@ for mp3 in "$SOUNDS_DIR"/*.mp3; do
   [ -f "$mp3" ] || continue
   base="${mp3%.mp3}"
   ogg="${base}.ogg"
+  if [[ -f "$ogg" && "$REGENERATE_ALL" != "true" ]]; then
+    echo "Skipping (exists): $(basename "$ogg")"
+    continue
+  fi
   echo "Converting: $(basename "$mp3") -> $(basename "$ogg")"
   $CONVERT "$mp3" "$ogg"
   ((count++)) || true
 done
 
 if [ "$count" -eq 0 ]; then
-  echo "No MP3 files found in $SOUNDS_DIR"
-  echo "Add .mp3 files there and run this script again."
+  echo "No conversions performed."
+  echo "Add new .mp3 files to $SOUNDS_DIR or use --all to regenerate existing .ogg files."
   exit 0
 fi
 
