@@ -24,6 +24,26 @@
       "climp:climp_idle_5"
     ]
   },
+  "climp_idle_6": {
+    "sounds": [
+      "climp:climp_idle_6"
+    ]
+  },
+  "climp_idle_7": {
+    "sounds": [
+      "climp:climp_idle_7"
+    ]
+  },
+  "climp_idle_8": {
+    "sounds": [
+      "climp:climp_idle_8"
+    ]
+  },
+  "climp_idle_9": {
+    "sounds": [
+      "climp:climp_idle_9"
+    ]
+  },
   "climp_hit_1": {
     "sounds": [
       "climp:climp_hit_1"
@@ -97,21 +117,6 @@
   "climp_task_failed_target_removed_2": {
     "sounds": [
       "climp:climp_task_failed_target_removed_2"
-    ]
-  },
-  "climp_idle_6": {
-    "sounds": [
-      "climp:climp_idle_6"
-    ]
-  },
-  "climp_idle_7": {
-    "sounds": [
-      "climp:climp_idle_7"
-    ]
-  },
-  "climp_idle_8": {
-    "sounds": [
-      "climp:climp_idle_8"
     ]
   }
 }

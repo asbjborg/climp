@@ -40,6 +40,11 @@
         "textline": "I am ready. Probably.",
         "voiceline": "[excited] I am ready! Probably.",
         "id": "climp_idle_8"
+      },
+      {
+        "textline": "I am observing very professionally.",
+        "voiceline": "[sarcastic] I am observing very professionally.",
+        "id": "climp_idle_9"
       }
     ],
   
