@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 import com.asbjborg.climp.entity.ClimpEntityTypes;
 import com.asbjborg.climp.item.ClimpItems;
+import com.asbjborg.climp.sound.ClimpSoundEvents;
 
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.IEventBus;
@@ -39,6 +40,7 @@ public class ClimpMod {
         // Register entity types.
         ClimpEntityTypes.ENTITY_TYPES.register(modEventBus);
         ClimpItems.ITEMS.register(modEventBus);
+        ClimpSoundEvents.SOUND_EVENTS.register(modEventBus);
 
         // Register this mod's ModConfigSpec so FML can create and load the config file.
         modContainer.registerConfig(ModConfig.Type.COMMON, ClimpConfig.SPEC);

@@ -1,0 +1,107 @@
+{
+  "climp_idle_1": {
+    "sounds": [
+      "climp:climp_idle_1"
+    ]
+  },
+  "climp_idle_2": {
+    "sounds": [
+      "climp:climp_idle_2"
+    ]
+  },
+  "climp_idle_3": {
+    "sounds": [
+      "climp:climp_idle_3"
+    ]
+  },
+  "climp_idle_4": {
+    "sounds": [
+      "climp:climp_idle_4"
+    ]
+  },
+  "climp_idle_5": {
+    "sounds": [
+      "climp:climp_idle_5"
+    ]
+  },
+  "climp_hit_1": {
+    "sounds": [
+      "climp:climp_hit_1"
+    ]
+  },
+  "climp_hit_2": {
+    "sounds": [
+      "climp:climp_hit_2"
+    ]
+  },
+  "climp_hit_3": {
+    "sounds": [
+      "climp:climp_hit_3"
+    ]
+  },
+  "climp_hit_4": {
+    "sounds": [
+      "climp:climp_hit_4"
+    ]
+  },
+  "climp_task_start_1": {
+    "sounds": [
+      "climp:climp_task_start_1"
+    ]
+  },
+  "climp_task_start_2": {
+    "sounds": [
+      "climp:climp_task_start_2"
+    ]
+  },
+  "climp_task_start_3": {
+    "sounds": [
+      "climp:climp_task_start_3"
+    ]
+  },
+  "climp_task_start_4": {
+    "sounds": [
+      "climp:climp_task_start_4"
+    ]
+  },
+  "climp_task_complete_1": {
+    "sounds": [
+      "climp:climp_task_complete_1"
+    ]
+  },
+  "climp_task_complete_2": {
+    "sounds": [
+      "climp:climp_task_complete_2"
+    ]
+  },
+  "climp_task_complete_3": {
+    "sounds": [
+      "climp:climp_task_complete_3"
+    ]
+  },
+  "climp_task_failed_unreachable_1": {
+    "sounds": [
+      "climp:climp_task_failed_unreachable_1"
+    ]
+  },
+  "climp_task_failed_unreachable_2": {
+    "sounds": [
+      "climp:climp_task_failed_unreachable_2"
+    ]
+  },
+  "climp_task_failed_target_removed_1": {
+    "sounds": [
+      "climp:climp_task_failed_target_removed_1"
+    ]
+  },
+  "climp_task_failed_target_removed_2": {
+    "sounds": [
+      "climp:climp_task_failed_target_removed_2"
+    ]
+  },
+  "climp_idle_6": {
+    "sounds": [
+      "climp:climp_idle_6"
+    ]
+  }
+}

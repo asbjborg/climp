@@ -6,42 +6,53 @@ import java.util.Map;
 import net.minecraft.util.RandomSource;
 
 public final class ClimpSpeechLibrary {
-    private static final Map<ClimpSpeechType, List<String>> LINES = Map.of(
+    /** Single source of truth: each line defines its text and the sound file name (e.g. climp_idle_1.ogg). */
+    public record Line(String text, String soundId) {}
+
+    private static final Map<ClimpSpeechType, List<Line>> LINES = Map.of(
             ClimpSpeechType.IDLE, List.of(
-                    "I am not lost. I am orbiting.",
-                    "That rock looked valuable. Emotionally.",
-                    "I could optimize this route, but then we would miss the ambiance.",
-                    "I am moderately helpful. Structurally flexible."),
+                    new Line("I am not lost. I am exploring in circles.", "climp_idle_1"),
+                    new Line("That rock looked important.", "climp_idle_2"),
+                    new Line("I am shiny. The world is less shiny.", "climp_idle_3"),
+                    new Line("I am small. But dramatic.", "climp_idle_4"),
+                    new Line("Do creepers fear me?", "climp_idle_5"),
+                    new Line("I sense adventure nearby.", "climp_idle_6")),
             ClimpSpeechType.HIT, List.of(
-                    "Rude. I am decorative and emotionally available.",
-                    "Ow. That was my best angle.",
-                    "Violence noted. Friendship pending.",
-                    "If this is a trust exercise, I am failing it."),
+                    new Line("Hey! I am delicate metal!", "climp_hit_1"),
+                    new Line("Rude! I was being helpful!", "climp_hit_2"),
+                    new Line("Bonk detected! Friendship shaken!", "climp_hit_3"),
+                    new Line("My feelings are slightly dented.", "climp_hit_4")),
             ClimpSpeechType.TASK_START, List.of(
-                    "Manual labor detected. Delegation accepted.",
-                    "Task acknowledged. Commencing dramatic approach.",
-                    "I shall handle this with professional ambiguity."),
+                    new Line("Ooooh yes! Time for work!", "climp_task_start_1"),
+                    new Line("Stand back! Professional noodle at work!", "climp_task_start_2"),
+                    new Line("I go now! Try not to panic!", "climp_task_start_3"),
+                    new Line("Clinks and clanks incoming!!", "climp_task_start_4")),
             ClimpSpeechType.TASK_COMPLETE, List.of(
-                    "Objective achieved. You are welcome.",
-                    "Task complete. I await further questionable directives.",
-                    "Objective concluded. Dignity mostly intact."),
+                    new Line("Done! I did the thing!", "climp_task_complete_1"),
+                    new Line("Todo defeated! Victory is mine!", "climp_task_complete_2"),
+                    new Line("Success! I remain magnificent!", "climp_task_complete_3")),
             ClimpSpeechType.TASK_FAILED_UNREACHABLE, List.of(
-                    "Pathing update: objective unreachable from my current dramatic position.",
-                    "I could not reach that target. Gravity and geometry have spoken.",
-                    "Objective unresolved. Access constraints exceeded."),
+                    new Line("I cannot reach that! I am not stretchy enough!", "climp_task_failed_unreachable_1"),
+                    new Line("Too far! My noodle legs are short!", "climp_task_failed_unreachable_2")),
             ClimpSpeechType.TASK_FAILED_TARGET_REMOVED, List.of(
-                    "Task canceled. The target no longer exists.",
-                    "Update: someone removed the objective before I arrived.",
-                    "Objective vanished mid-operation. Suspicious."));
+                    new Line("Hey! It disappeared?!", "climp_task_failed_target_removed_1"),
+                    new Line("I was going to do that!", "climp_task_failed_target_removed_2")));
 
     private ClimpSpeechLibrary() {
     }
 
-    public static String randomLine(ClimpSpeechType type, RandomSource random) {
-        List<String> lines = LINES.get(type);
+    /**
+     * Picks a random line for the given speech type. Never returns the excluded soundId if another
+     * option exists, so the same line is not repeated twice in a row.
+     */
+    public static Line randomLine(ClimpSpeechType type, RandomSource random, String excludeSoundId) {
+        List<Line> lines = LINES.get(type);
         if (lines == null || lines.isEmpty()) {
-            return "...";
+            return new Line("...", "climp_idle_1");
         }
-        return lines.get(random.nextInt(lines.size()));
+        List<Line> candidates = excludeSoundId != null && lines.size() > 1
+                ? lines.stream().filter(l -> !l.soundId().equals(excludeSoundId)).toList()
+                : lines;
+        return candidates.get(random.nextInt(candidates.size()));
     }
 }

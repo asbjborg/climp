@@ -1,9 +1,14 @@
 package com.asbjborg.climp.speech;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 import com.asbjborg.climp.entity.ClimpEntity;
+import com.asbjborg.climp.sound.ClimpSoundEvents;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
 
@@ -18,6 +23,7 @@ public final class ClimpSpeechManager {
 
     private int idleCooldownTicks = 20 * 20;
     private int hitCooldownTicks = 0;
+    private final Map<ClimpSpeechType, String> lastSoundIdByType = new EnumMap<>(ClimpSpeechType.class);
 
     public void tick(ClimpEntity climp) {
         if (hitCooldownTicks > 0) {
@@ -32,7 +38,7 @@ public final class ClimpSpeechManager {
         }
 
         if (source.getEntity() instanceof ServerPlayer player) {
-            send(player, ClimpSpeechLibrary.randomLine(ClimpSpeechType.HIT, climp.getRandom()));
+            send(climp, player, ClimpSpeechType.HIT, pickLine(ClimpSpeechType.HIT, climp));
             hitCooldownTicks = 20 * 8;
             // Delay idle chatter for a bit after a hit reaction.
             idleCooldownTicks = Math.max(idleCooldownTicks, 20 * 10);
@@ -43,7 +49,7 @@ public final class ClimpSpeechManager {
         if (climp.level().isClientSide) {
             return;
         }
-        send(player, ClimpSpeechLibrary.randomLine(ClimpSpeechType.TASK_START, climp.getRandom()));
+        send(climp, player, ClimpSpeechType.TASK_START, pickLine(ClimpSpeechType.TASK_START, climp));
         // Pause idle chatter briefly so command speech is not immediately followed by idle text.
         idleCooldownTicks = Math.max(idleCooldownTicks, 20 * 8);
     }
@@ -52,7 +58,7 @@ public final class ClimpSpeechManager {
         if (climp.level().isClientSide) {
             return;
         }
-        send(player, ClimpSpeechLibrary.randomLine(ClimpSpeechType.TASK_COMPLETE, climp.getRandom()));
+        send(climp, player, ClimpSpeechType.TASK_COMPLETE, pickLine(ClimpSpeechType.TASK_COMPLETE, climp));
         idleCooldownTicks = Math.max(idleCooldownTicks, 20 * 10);
     }
 
@@ -64,12 +70,16 @@ public final class ClimpSpeechManager {
             case TARGET_REMOVED -> ClimpSpeechType.TASK_FAILED_TARGET_REMOVED;
             case UNREACHABLE -> ClimpSpeechType.TASK_FAILED_UNREACHABLE;
         };
-        send(player, ClimpSpeechLibrary.randomLine(failureType, climp.getRandom()));
+        send(climp, player, failureType, pickLine(failureType, climp));
         idleCooldownTicks = Math.max(idleCooldownTicks, 20 * 10);
     }
 
     private void tryIdleSpeech(ClimpEntity climp) {
         if (climp.level().isClientSide || idleCooldownTicks-- > 0) {
+            return;
+        }
+
+        if (climp.hasCommandTask()) {
             return;
         }
 
@@ -84,11 +94,23 @@ public final class ClimpSpeechManager {
             return;
         }
 
-        send(player, ClimpSpeechLibrary.randomLine(ClimpSpeechType.IDLE, climp.getRandom()));
+        send(climp, player, ClimpSpeechType.IDLE, pickLine(ClimpSpeechType.IDLE, climp));
         idleCooldownTicks = 20 * 35;
     }
 
-    private static void send(ServerPlayer player, String line) {
-        player.sendSystemMessage(Component.literal("Climp: " + line));
+    private ClimpSpeechLibrary.Line pickLine(ClimpSpeechType type, ClimpEntity climp) {
+        return ClimpSpeechLibrary.randomLine(type, climp.getRandom(), lastSoundIdByType.get(type));
+    }
+
+    private void send(ClimpEntity climp, ServerPlayer player, ClimpSpeechType type, ClimpSpeechLibrary.Line line) {
+        lastSoundIdByType.put(type, line.soundId());
+        player.sendSystemMessage(Component.literal("Climp: " + line.text()));
+        climp.level().playSound(
+                null,
+                climp.blockPosition(),
+                ClimpSoundEvents.get(line.soundId()).value(),
+                SoundSource.NEUTRAL,
+                1.0f,
+                1.0f);
     }
 }
