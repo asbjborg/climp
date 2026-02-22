@@ -139,6 +139,11 @@
       "climp:climp_task_failed_unreachable_4"
     ]
   },
+  "climp_task_failed_unreachable_5": {
+    "sounds": [
+      "climp:climp_task_failed_unreachable_5"
+    ]
+  },
   "climp_task_failed_target_removed_1": {
     "sounds": [
       "climp:climp_task_failed_target_removed_1"

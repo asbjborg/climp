@@ -151,6 +151,11 @@
         "textline": "I require longer legs immediately!",
         "voiceline": "[mischievously] I require longer legs immediately!",
         "id": "climp_task_failed_unreachable_4"
+      },
+      {
+        "textline": "This is too trifficult!",
+        "voiceline": "[frustrated] This is too trifficult!",
+        "id": "climp_task_failed_unreachable_5"
       }
     ],
   

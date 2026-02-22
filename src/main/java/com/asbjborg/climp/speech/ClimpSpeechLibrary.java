@@ -42,7 +42,8 @@ public final class ClimpSpeechLibrary {
                     new Line("I cannot reach that! I am not stretchy enough!", "climp_task_failed_unreachable_1"),
                     new Line("Too far! My noodle legs are short!", "climp_task_failed_unreachable_2"),
                     new Line("This is clearly too tall for me!", "climp_task_failed_unreachable_3"),
-                    new Line("I require longer legs immediately!", "climp_task_failed_unreachable_4")),
+                    new Line("I require longer legs immediately!", "climp_task_failed_unreachable_4"),
+                    new Line("This is too trifficult!", "climp_task_failed_unreachable_5")),
             ClimpSpeechType.TASK_FAILED_TARGET_REMOVED, List.of(
                     new Line("Hey! It disappeared?!", "climp_task_failed_target_removed_1"),
                     new Line("I was going to do that!", "climp_task_failed_target_removed_2"),
