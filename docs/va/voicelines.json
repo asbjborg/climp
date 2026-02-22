@@ -1,0 +1,125 @@
+
+{
+    "idlelines": [
+      {
+        "textline": "I am not lost. I am exploring in circles.",
+        "voiceline": "[curious] I am NOT lost… I am exploring in circles!",
+        "id": "climp_idle_1"
+      },
+      {
+        "textline": "That rock looked important.",
+        "voiceline": "[curious] That rock looked IMPORTANT.",
+        "id": "climp_idle_2"
+      },
+      {
+        "textline": "I am shiny. The world is less shiny.",
+        "voiceline": "[mischievously] I am shiny… the world is LESS shiny.",
+        "id": "climp_idle_3"
+      },
+      {
+        "textline": "I am small. But dramatic.",
+        "voiceline": "[excited] I am small! But DRAMATIC!",
+        "id": "climp_idle_4"
+      },
+      {
+        "textline": "Do creepers fear me?",
+        "voiceline": "[whispers] Do creepers fear me?",
+        "id": "climp_idle_5"
+      },
+      {
+        "textline": "I sense adventure nearby.",
+        "voiceline": "[curious] I sense adventure nearby…",
+        "id": "climp_idle_6"
+      }
+    ],
+  
+    "hitlines": [
+      {
+        "textline": "Hey! I am delicate metal!",
+        "voiceline": "[excited] HEY! I am delicate metal!",
+        "id": "climp_hit_1"
+      },
+      {
+        "textline": "Rude! I was being helpful!",
+        "voiceline": "[sarcastic] Rude! I was being helpful!",
+        "id": "climp_hit_2"
+      },
+      {
+        "textline": "Bonk detected! Friendship shaken!",
+        "voiceline": "[snorts] Bonk detected! Friendship shaken!",
+        "id": "climp_hit_3"
+      },
+      {
+        "textline": "My feelings are slightly dented.",
+        "voiceline": "[sighs] My feelings are slightly dented.",
+        "id": "climp_hit_4"
+      }
+    ],
+  
+    "taskstartlines": [
+      {
+        "textline": "Ooooh yes! Time for work!",
+        "voiceline": "[excited] Ooooh yes! Time for work!",
+        "id": "climp_task_start_1"
+      },
+      {
+        "textline": "Stand back! Professional noodle at work!",
+        "voiceline": "[excited] Stand back! Professional noodle at work!",
+        "id": "climp_task_start_2"
+      },
+      {
+        "textline": "I go now! Try not to panic!",
+        "voiceline": "[excited] I go now! Try not to panic!",
+        "id": "climp_task_start_3"
+      },
+      {
+        "textline": "Clinks and clanks incoming!!",
+        "voiceline": "[mischievously] Clinks and clanks incoming!!",
+        "id": "climp_task_start_4"
+      }
+    ],
+  
+    "taskcompletelines": [
+      {
+        "textline": "Done! I did the thing!",
+        "voiceline": "[excited] DONE! I did the thing!",
+        "id": "climp_task_complete_1"
+      },
+      {
+        "textline": "Todo defeated! Victory is mine!",
+        "voiceline": "[excited] To-do defeated! Victory is MINE!",
+        "id": "climp_task_complete_2"
+      },
+      {
+        "textline": "Success! I remain magnificent!",
+        "voiceline": "[woo] Success! I remain magnificent!",
+        "id": "climp_task_complete_3"
+      }
+    ],
+  
+    "taskfailedunreachable": [
+      {
+        "textline": "I cannot reach that! I am not stretchy enough!",
+        "voiceline": "[sighs] I cannot reach that! I am not stretchy enough!",
+        "id": "climp_task_failed_unreachable_1"
+      },
+      {
+        "textline": "Too far! My noodle legs are short!",
+        "voiceline": "[excited] Too far! My noodle legs are SHORT!",
+        "id": "climp_task_failed_unreachable_2"
+      }
+    ],
+  
+    "taskfailedtargetremoved": [
+      {
+        "textline": "Hey! It disappeared?!",
+        "voiceline": "[excited] HEY! It disappeared?!",
+        "id": "climp_task_failed_target_removed_1"
+      },
+      {
+        "textline": "I was going to do that!",
+        "voiceline": "[sarcastic] I was going to do that!",
+        "id": "climp_task_failed_target_removed_2"
+      } 
+    ]
+  }
