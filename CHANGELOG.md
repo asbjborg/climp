@@ -20,6 +20,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.4.0] - 2026-02-22
+
+### Added
+- Voice playback for Climp speech: one `.ogg` file per line in `assets/climp/sounds/`. Speech plays at the entity position in addition to chat.
+- Climp never repeats the same line twice in a row; last-used line per speech type is excluded when picking the next.
+- Single source of truth: `ClimpSpeechLibrary` maps each line’s text directly to its sound file name.
+- `scripts/generate_va.py` to generate voice lines via ElevenLabs: pick category and line, preview, then save to sounds and wire into the mod.
+- `scripts/mp3_to_ogg.sh` to batch-convert MP3 files in the sounds folder to OGG.
+
+### Changed
+- *(nothing yet)*
+
+### Fixed
+- *(nothing yet)*
+
+---
+
 ## [0.3.1] - 2026-02-18
 
 ### Added
@@ -99,7 +116,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Voice lines:** Rare idle chat lines and hit-response lines (no diamond-ore trigger yet).
 - **Docs:** BACKLOG.md (idea dump), WORK.md (tasks linked to backlog), CHANGELOG.md (this file); README links to all three.
 
-[Unreleased]: https://github.com/asbjborg/climp/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/asbjborg/climp/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/asbjborg/climp/releases/tag/v0.4.0
 [0.3.1]: https://github.com/asbjborg/climp/releases/tag/v0.3.1
 [0.3.0]: https://github.com/asbjborg/climp/releases/tag/v0.3.0
 [0.2.0]: https://github.com/asbjborg/climp/releases/tag/v0.2.0

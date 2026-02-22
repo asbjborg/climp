@@ -17,6 +17,19 @@ out
 build
 .gradle
 
+# env (API keys)
+.env
+
+# macOS
+.DS_Store
+
+# python
+__pycache__/
+
+# VA workflow: mp3 sources (we commit .ogg) and backups
+**/sounds/*.mp3
+*.ogg.backup
+
 # other
 eclipse
 run
