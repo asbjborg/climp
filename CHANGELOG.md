@@ -20,6 +20,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.4.1] - 2026-02-18
+
+### Added
+- Additional voice lines: hit (2), task complete (2), task failed unreachable (2), task failed target removed (2).
+
+### Changed
+- *(nothing yet)*
+
+### Fixed
+- *(nothing yet)*
+
+---
+
 ## [0.4.0] - 2026-02-22
 
 ### Added
@@ -116,7 +129,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Voice lines:** Rare idle chat lines and hit-response lines (no diamond-ore trigger yet).
 - **Docs:** BACKLOG.md (idea dump), WORK.md (tasks linked to backlog), CHANGELOG.md (this file); README links to all three.
 
-[Unreleased]: https://github.com/asbjborg/climp/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/asbjborg/climp/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/asbjborg/climp/releases/tag/v0.4.1
 [0.4.0]: https://github.com/asbjborg/climp/releases/tag/v0.4.0
 [0.3.1]: https://github.com/asbjborg/climp/releases/tag/v0.3.1
 [0.3.0]: https://github.com/asbjborg/climp/releases/tag/v0.3.0

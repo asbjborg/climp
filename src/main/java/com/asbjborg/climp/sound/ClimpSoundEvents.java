@@ -33,6 +33,8 @@ public final class ClimpSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_HIT_2 = reg("climp_hit_2");
     public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_HIT_3 = reg("climp_hit_3");
     public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_HIT_4 = reg("climp_hit_4");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_HIT_5 = reg("climp_hit_5");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_HIT_6 = reg("climp_hit_6");
 
     // TASK_START
     public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_TASK_START_1 = reg("climp_task_start_1");
@@ -44,14 +46,20 @@ public final class ClimpSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_TASK_COMPLETE_1 = reg("climp_task_complete_1");
     public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_TASK_COMPLETE_2 = reg("climp_task_complete_2");
     public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_TASK_COMPLETE_3 = reg("climp_task_complete_3");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_TASK_COMPLETE_4 = reg("climp_task_complete_4");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_TASK_COMPLETE_5 = reg("climp_task_complete_5");
 
     // TASK_FAILED_UNREACHABLE
     public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_TASK_FAILED_UNREACHABLE_1 = reg("climp_task_failed_unreachable_1");
     public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_TASK_FAILED_UNREACHABLE_2 = reg("climp_task_failed_unreachable_2");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_TASK_FAILED_UNREACHABLE_3 = reg("climp_task_failed_unreachable_3");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_TASK_FAILED_UNREACHABLE_4 = reg("climp_task_failed_unreachable_4");
 
     // TASK_FAILED_TARGET_REMOVED
     public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_TASK_FAILED_TARGET_REMOVED_1 = reg("climp_task_failed_target_removed_1");
     public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_TASK_FAILED_TARGET_REMOVED_2 = reg("climp_task_failed_target_removed_2");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_TASK_FAILED_TARGET_REMOVED_3 = reg("climp_task_failed_target_removed_3");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_TASK_FAILED_TARGET_REMOVED_4 = reg("climp_task_failed_target_removed_4");
 
     private static final Map<String, Holder<SoundEvent>> BY_SOUND_ID = Map.ofEntries(
             Map.entry("climp_idle_1", CLIMP_IDLE_1),
@@ -67,6 +75,8 @@ public final class ClimpSoundEvents {
             Map.entry("climp_hit_2", CLIMP_HIT_2),
             Map.entry("climp_hit_3", CLIMP_HIT_3),
             Map.entry("climp_hit_4", CLIMP_HIT_4),
+            Map.entry("climp_hit_5", CLIMP_HIT_5),
+            Map.entry("climp_hit_6", CLIMP_HIT_6),
             Map.entry("climp_task_start_1", CLIMP_TASK_START_1),
             Map.entry("climp_task_start_2", CLIMP_TASK_START_2),
             Map.entry("climp_task_start_3", CLIMP_TASK_START_3),
@@ -74,10 +84,16 @@ public final class ClimpSoundEvents {
             Map.entry("climp_task_complete_1", CLIMP_TASK_COMPLETE_1),
             Map.entry("climp_task_complete_2", CLIMP_TASK_COMPLETE_2),
             Map.entry("climp_task_complete_3", CLIMP_TASK_COMPLETE_3),
+            Map.entry("climp_task_complete_4", CLIMP_TASK_COMPLETE_4),
+            Map.entry("climp_task_complete_5", CLIMP_TASK_COMPLETE_5),
             Map.entry("climp_task_failed_unreachable_1", CLIMP_TASK_FAILED_UNREACHABLE_1),
             Map.entry("climp_task_failed_unreachable_2", CLIMP_TASK_FAILED_UNREACHABLE_2),
+            Map.entry("climp_task_failed_unreachable_3", CLIMP_TASK_FAILED_UNREACHABLE_3),
+            Map.entry("climp_task_failed_unreachable_4", CLIMP_TASK_FAILED_UNREACHABLE_4),
             Map.entry("climp_task_failed_target_removed_1", CLIMP_TASK_FAILED_TARGET_REMOVED_1),
-            Map.entry("climp_task_failed_target_removed_2", CLIMP_TASK_FAILED_TARGET_REMOVED_2));
+            Map.entry("climp_task_failed_target_removed_2", CLIMP_TASK_FAILED_TARGET_REMOVED_2),
+            Map.entry("climp_task_failed_target_removed_3", CLIMP_TASK_FAILED_TARGET_REMOVED_3),
+            Map.entry("climp_task_failed_target_removed_4", CLIMP_TASK_FAILED_TARGET_REMOVED_4));
 
     private ClimpSoundEvents() {
     }

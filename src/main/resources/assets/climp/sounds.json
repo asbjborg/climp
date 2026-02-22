@@ -64,6 +64,16 @@
       "climp:climp_hit_4"
     ]
   },
+  "climp_hit_5": {
+    "sounds": [
+      "climp:climp_hit_5"
+    ]
+  },
+  "climp_hit_6": {
+    "sounds": [
+      "climp:climp_hit_6"
+    ]
+  },
   "climp_task_start_1": {
     "sounds": [
       "climp:climp_task_start_1"
@@ -99,6 +109,16 @@
       "climp:climp_task_complete_3"
     ]
   },
+  "climp_task_complete_4": {
+    "sounds": [
+      "climp:climp_task_complete_4"
+    ]
+  },
+  "climp_task_complete_5": {
+    "sounds": [
+      "climp:climp_task_complete_5"
+    ]
+  },
   "climp_task_failed_unreachable_1": {
     "sounds": [
       "climp:climp_task_failed_unreachable_1"
@@ -109,6 +129,16 @@
       "climp:climp_task_failed_unreachable_2"
     ]
   },
+  "climp_task_failed_unreachable_3": {
+    "sounds": [
+      "climp:climp_task_failed_unreachable_3"
+    ]
+  },
+  "climp_task_failed_unreachable_4": {
+    "sounds": [
+      "climp:climp_task_failed_unreachable_4"
+    ]
+  },
   "climp_task_failed_target_removed_1": {
     "sounds": [
       "climp:climp_task_failed_target_removed_1"
@@ -117,6 +147,16 @@
   "climp_task_failed_target_removed_2": {
     "sounds": [
       "climp:climp_task_failed_target_removed_2"
+    ]
+  },
+  "climp_task_failed_target_removed_3": {
+    "sounds": [
+      "climp:climp_task_failed_target_removed_3"
+    ]
+  },
+  "climp_task_failed_target_removed_4": {
+    "sounds": [
+      "climp:climp_task_failed_target_removed_4"
     ]
   }
 }

@@ -24,7 +24,9 @@ public final class ClimpSpeechLibrary {
                     new Line("Hey! I am delicate metal!", "climp_hit_1"),
                     new Line("Rude! I was being helpful!", "climp_hit_2"),
                     new Line("Bonk detected! Friendship shaken!", "climp_hit_3"),
-                    new Line("My feelings are slightly dented.", "climp_hit_4")),
+                    new Line("My feelings are slightly dented.", "climp_hit_4"),
+                    new Line("I have been attacked! Dramatically!", "climp_hit_5"),
+                    new Line("Unacceptable bonking behavior!", "climp_hit_6")),
             ClimpSpeechType.TASK_START, List.of(
                     new Line("Ooooh yes! Time for work!", "climp_task_start_1"),
                     new Line("Stand back! Professional noodle at work!", "climp_task_start_2"),
@@ -33,13 +35,19 @@ public final class ClimpSpeechLibrary {
             ClimpSpeechType.TASK_COMPLETE, List.of(
                     new Line("Done! I did the thing!", "climp_task_complete_1"),
                     new Line("Todo defeated! Victory is mine!", "climp_task_complete_2"),
-                    new Line("Success! I remain magnificent!", "climp_task_complete_3")),
+                    new Line("Success! I remain magnificent!", "climp_task_complete_3"),
+                    new Line("All done! I expect applause!", "climp_task_complete_4"),
+                    new Line("Another glorious victory!", "climp_task_complete_5")),
             ClimpSpeechType.TASK_FAILED_UNREACHABLE, List.of(
                     new Line("I cannot reach that! I am not stretchy enough!", "climp_task_failed_unreachable_1"),
-                    new Line("Too far! My noodle legs are short!", "climp_task_failed_unreachable_2")),
+                    new Line("Too far! My noodle legs are short!", "climp_task_failed_unreachable_2"),
+                    new Line("This is clearly too tall for me!", "climp_task_failed_unreachable_3"),
+                    new Line("I require longer legs immediately!", "climp_task_failed_unreachable_4")),
             ClimpSpeechType.TASK_FAILED_TARGET_REMOVED, List.of(
                     new Line("Hey! It disappeared?!", "climp_task_failed_target_removed_1"),
-                    new Line("I was going to do that!", "climp_task_failed_target_removed_2")));
+                    new Line("I was going to do that!", "climp_task_failed_target_removed_2"),
+                    new Line("Who took it? Show yourself!", "climp_task_failed_target_removed_3"),
+                    new Line("I blame invisible gremlins.", "climp_task_failed_target_removed_4")));
 
     private ClimpSpeechLibrary() {
     }
