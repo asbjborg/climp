@@ -37,3 +37,9 @@ runs
 run-data
 
 repo
+
+# built mod JARs for local install (scripts/build_mod.sh)
+dist
+
+# personal deploy script (path to local instance)
+scripts/deploy_to_instance.sh

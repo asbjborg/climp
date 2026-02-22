@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Deploy Climp into your local instance. Copy to deploy_to_instance.sh and set INSTANCE_PATH.
+# Add deploy_to_instance.sh to .gitignore to keep your path private.
+set -e
+INSTANCE_PATH="/path/to/your/instance"
+cd "$(dirname "$0")/.."
+./gradlew build --quiet
+VERSION=$(grep mod_version gradle.properties | cut -d= -f2)
+JAR="build/libs/climp-${VERSION}.jar"
+MODS_DIR="${INSTANCE_PATH}/mods"
+mkdir -p "$MODS_DIR"
+cp "$JAR" "$MODS_DIR/"
+echo "Deployed climp-${VERSION}.jar → $MODS_DIR"
