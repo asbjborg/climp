@@ -24,6 +24,8 @@ public final class ClimpSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_IDLE_4 = reg("climp_idle_4");
     public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_IDLE_5 = reg("climp_idle_5");
     public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_IDLE_6 = reg("climp_idle_6");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_IDLE_7 = reg("climp_idle_7");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_IDLE_8 = reg("climp_idle_8");
 
     // HIT
     public static final DeferredHolder<SoundEvent, SoundEvent> CLIMP_HIT_1 = reg("climp_hit_1");
@@ -57,6 +59,8 @@ public final class ClimpSoundEvents {
             Map.entry("climp_idle_4", CLIMP_IDLE_4),
             Map.entry("climp_idle_5", CLIMP_IDLE_5),
             Map.entry("climp_idle_6", CLIMP_IDLE_6),
+            Map.entry("climp_idle_7", CLIMP_IDLE_7),
+            Map.entry("climp_idle_8", CLIMP_IDLE_8),
             Map.entry("climp_hit_1", CLIMP_HIT_1),
             Map.entry("climp_hit_2", CLIMP_HIT_2),
             Map.entry("climp_hit_3", CLIMP_HIT_3),

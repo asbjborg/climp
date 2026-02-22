@@ -30,6 +30,16 @@
         "textline": "I sense adventure nearby.",
         "voiceline": "[curious] I sense adventure nearby…",
         "id": "climp_idle_6"
+      },
+      {
+        "textline": "If I had hands, I would gesture dramatically.",
+        "voiceline": "[mischievously] If I had hands, I would gesture dramatically.",
+        "id": "climp_idle_7"
+      },
+      {
+        "textline": "I am ready. Probably.",
+        "voiceline": "[excited] I am ready! Probably.",
+        "id": "climp_idle_8"
       }
     ],
   

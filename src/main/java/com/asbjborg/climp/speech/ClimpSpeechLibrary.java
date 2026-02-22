@@ -16,7 +16,9 @@ public final class ClimpSpeechLibrary {
                     new Line("I am shiny. The world is less shiny.", "climp_idle_3"),
                     new Line("I am small. But dramatic.", "climp_idle_4"),
                     new Line("Do creepers fear me?", "climp_idle_5"),
-                    new Line("I sense adventure nearby.", "climp_idle_6")),
+                    new Line("I sense adventure nearby.", "climp_idle_6"),
+                    new Line("If I had hands, I would gesture dramatically.", "climp_idle_7"),
+                    new Line("I am ready. Probably.", "climp_idle_8")),
             ClimpSpeechType.HIT, List.of(
                     new Line("Hey! I am delicate metal!", "climp_hit_1"),
                     new Line("Rude! I was being helpful!", "climp_hit_2"),

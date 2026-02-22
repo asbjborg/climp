@@ -103,5 +103,15 @@
     "sounds": [
       "climp:climp_idle_6"
     ]
+  },
+  "climp_idle_7": {
+    "sounds": [
+      "climp:climp_idle_7"
+    ]
+  },
+  "climp_idle_8": {
+    "sounds": [
+      "climp:climp_idle_8"
+    ]
   }
 }
