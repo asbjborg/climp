@@ -82,7 +82,7 @@ public final class CommandRodItem extends Item {
         }
 
         ClimpEntity nearestReadyClimp = nearbyClimps.stream()
-                .filter(ClimpEntity::canAcceptCommandTask)
+                .filter(climp -> climp.canAcceptCommandTask() && climp.isOwnedBy(player))
                 .min(Comparator.comparingDouble(climp -> climp.distanceToSqr(player)))
                 .orElse(null);
 
@@ -123,7 +123,7 @@ public final class CommandRodItem extends Item {
         }
 
         ClimpEntity nearestBusyClimp = nearbyClimps.stream()
-                .filter(ClimpEntity::hasCommandTask)
+                .filter(climp -> climp.hasCommandTask() && climp.isOwnedBy(player))
                 .min(Comparator.comparingDouble(climp -> climp.distanceToSqr(player)))
                 .orElse(null);
 

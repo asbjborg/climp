@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - *(nothing yet)*
 
 ### Fixed
-- *(nothing yet)*
+- Climp ownership is now bound to the player who uses the spawn egg; follow and command-rod behavior respect that owner only, preventing nearby non-owners from hijacking another player's Climp.
 
 ---
 

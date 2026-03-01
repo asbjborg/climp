@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
 import com.asbjborg.climp.speech.ClimpSpeechManager;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
@@ -34,6 +35,7 @@ import net.minecraft.world.level.Level;
  * Climp entity with MVP follow behavior.
  */
 public class ClimpEntity extends PathfinderMob {
+    private static final String OWNER_UUID_TAG = "OwnerUUID";
     private static final double COMMAND_TASK_RANGE_SQR = 16.0D * 16.0D;
     private static final double COMMAND_TASK_REACH_BLOCKS = 3.0D;
     private static final double COMMAND_RETURN_REACH_SQR = 3.0D * 3.0D;
@@ -44,6 +46,8 @@ public class ClimpEntity extends PathfinderMob {
     private static final int COMMAND_NO_PATH_FAIL_TICKS = 20 * 2;
 
     private final ClimpSpeechManager speechManager = new ClimpSpeechManager();
+    @Nullable
+    private UUID ownerId;
     @Nullable
     private BlockPos commandTargetPos;
     private final Deque<BlockPos> commandQueuedTargets = new ArrayDeque<>();
@@ -70,7 +74,7 @@ public class ClimpEntity extends PathfinderMob {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new CommandTargetGoal(this, 1.18D));
-        this.goalSelector.addGoal(2, new FollowNearestPlayerGoal(this, 1.12D, 3.0F, 28.0F));
+        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.12D, 3.0F, 28.0F));
         this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.9D));
         this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
@@ -83,6 +87,20 @@ public class ClimpEntity extends PathfinderMob {
         if (this.commandCooldownTicks > 0) {
             this.commandCooldownTicks--;
         }
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        if (this.ownerId != null) {
+            tag.putUUID(OWNER_UUID_TAG, this.ownerId);
+        }
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.ownerId = tag.hasUUID(OWNER_UUID_TAG) ? tag.getUUID(OWNER_UUID_TAG) : null;
     }
 
     @Override
@@ -103,7 +121,7 @@ public class ClimpEntity extends PathfinderMob {
     }
 
     public boolean assignLogTask(ServerPlayer requester, List<BlockPos> targetPositions) {
-        if (this.level().isClientSide || !this.canAcceptCommandTask()) {
+        if (this.level().isClientSide || !this.isOwnedBy(requester) || !this.canAcceptCommandTask()) {
             return false;
         }
 
@@ -144,7 +162,8 @@ public class ClimpEntity extends PathfinderMob {
     }
 
     public boolean requestImmediateRecall(ServerPlayer requester) {
-        if (this.level().isClientSide || this.commandTaskStage == CommandTaskStage.NONE) {
+        if (this.level().isClientSide || !this.isOwnedBy(requester)
+                || this.commandTaskStage == CommandTaskStage.NONE) {
             return false;
         }
 
@@ -169,6 +188,18 @@ public class ClimpEntity extends PathfinderMob {
 
     public boolean isOnCommandCooldown() {
         return this.commandTaskStage == CommandTaskStage.NONE && this.commandCooldownTicks > 0;
+    }
+
+    public boolean isOwnedBy(ServerPlayer player) {
+        return this.ownerId != null && this.ownerId.equals(player.getUUID());
+    }
+
+    public boolean hasOwner() {
+        return this.ownerId != null;
+    }
+
+    public void setOwner(ServerPlayer owner) {
+        this.ownerId = owner.getUUID();
     }
 
     @Nullable
@@ -318,6 +349,14 @@ public class ClimpEntity extends PathfinderMob {
             return null;
         }
         return this.level().getServer().getPlayerList().getPlayer(this.commandRequesterId);
+    }
+
+    @Nullable
+    private ServerPlayer getOwnerPlayer() {
+        if (this.ownerId == null || this.level().getServer() == null) {
+            return null;
+        }
+        return this.level().getServer().getPlayerList().getPlayer(this.ownerId);
     }
 
     private void clearBreakProgress() {
@@ -476,7 +515,7 @@ public class ClimpEntity extends PathfinderMob {
         }
     }
 
-    private static final class FollowNearestPlayerGoal extends Goal {
+    private static final class FollowOwnerGoal extends Goal {
         private final ClimpEntity climp;
         private final double speedModifier;
         private final float stopDistance;
@@ -485,7 +524,7 @@ public class ClimpEntity extends PathfinderMob {
         private Player targetPlayer;
         private int recalcPathTicks;
 
-        private FollowNearestPlayerGoal(ClimpEntity climp, double speedModifier, float stopDistance, float maxDistance) {
+        private FollowOwnerGoal(ClimpEntity climp, double speedModifier, float stopDistance, float maxDistance) {
             this.climp = climp;
             this.speedModifier = speedModifier;
             this.stopDistance = stopDistance;
@@ -495,13 +534,13 @@ public class ClimpEntity extends PathfinderMob {
 
         @Override
         public boolean canUse() {
-            Player nearest = this.climp.level().getNearestPlayer(this.climp, this.maxDistance);
-            if (nearest == null || nearest.isSpectator()) {
+            Player ownerPlayer = this.climp.getOwnerPlayer();
+            if (ownerPlayer == null || ownerPlayer.isSpectator()) {
                 return false;
             }
 
-            this.targetPlayer = nearest;
-            return this.climp.distanceToSqr(nearest) > (double) (this.stopDistance * this.stopDistance);
+            this.targetPlayer = ownerPlayer;
+            return this.climp.distanceToSqr(ownerPlayer) > (double) (this.stopDistance * this.stopDistance);
         }
 
         @Override
